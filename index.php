@@ -18,19 +18,21 @@ $result = $con->query($sql);
 if($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         $questions[$row['id']] = $row['question'];
+        // Decode json...
     }
 } else {
     echo 'No Results';
 }
 
-$answers = array();
+$answers = array(array());
 
 $sql = "SELECT * FROM answers";
 $result = $con->query($sql);
 
 if($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
-        $answers[$row['question_id']] = $row['answer'];
+        array_push($answers[$row['question_id']], $row['answer']);
+        //$answers[$row['question_id']] = $row['answer'];
     }
 } else {
     echo 'No Results';
@@ -46,3 +48,25 @@ $result = $con->query($sql);
     <head></head>
     <body></body>
 </html>
+
+// Option 1 - with question flow table
+question1 -> question2 = {
+    "answer": {1,2}
+}
+
+question1 -> question3 = {
+    "answer": {3}
+}
+
+question1 -> question4 = {
+    "answer": {4,5}
+}
+
+// Option 2 - housed in question table
+{
+    "answer-1": 2,
+    "answer-2": 2,
+    "answer-3": 3,
+    "answer-4": 4,
+    "answer-5": 4
+}
