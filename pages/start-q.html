@@ -1,8 +1,20 @@
 <!doctype html>
-
+<script src="C:/Users/John/Documents/GitHub/frostburg-forward/js/main.js" language="javascript" type="text/javascript">
+    $(document).ready(function(){
+           $.ajax({
+                type: "POST",
+                url: "C:/Users/John/Documents/GitHub/frostburg-forward/index.php" ,
+                success : function() {
+                   alert("created");
+                }
+            }).error(function(){
+            alert('error... ohh no!');
+          });
+        });
+</script>
 <html>
     <head>
-        <title>Frostburg Forward - Business Tool</title>
+        <title id="abc">Frostburg Forward - Business Tool</title>
 
         <meta charset="utf-8">
         <meta name="description" content="">
@@ -33,7 +45,7 @@
             <section class="single color">
                 <div class="grid-fixed cf">
                     <div id="questions" class="c8">
-                        <h1 id=question_text>Do you know the exact location of where your business will be located?</h1>
+                        <h1 id=question_text></h1>
                         <div class="button"><a href="start-q2a.html" class="full">Yes</a></div>
                         <div class="button"><a href="start-q2b.html" class="full">No</a></div>
                     </div>

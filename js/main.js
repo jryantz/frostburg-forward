@@ -1,6 +1,13 @@
-<script>
-  var questions = <?php echo json_encode($questions); ?>;
-  var answers = <?php echo json_encode($answers); ?>;
-  var question_flow = <?php echo json_encode($question_flow); ?>;
-  var resources = <?php echo json_encode($resources); ?>;
-</script>
+
+  var questions = json_encode($questions);
+  var answers = json_encode($answers);
+  var question_flow = json_encode($question_flow);
+  var resources = json_encode($resources);
+
+  function getQuestionText(id){
+    question_text.innertext = questions[id];
+  }
+
+  function getAnswers(){
+
+  }
