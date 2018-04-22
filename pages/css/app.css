@@ -11,8 +11,8 @@
 }
 
 .grid-fixed {
-    margin: 50px auto;
-    width: 960px;
+    margin: 25px auto;
+    width: 80%;
 }
 
 nav.grid-fixed {
@@ -21,7 +21,7 @@ nav.grid-fixed {
 
 .grid-fixed .c12 {
     width: 940px;
-    margin: 0 10px;
+    margin: auto;
 }
 
 .grid-fixed .c9 {
@@ -31,12 +31,12 @@ nav.grid-fixed {
 
 .grid-fixed .c8 {
     width: 620px;
-    margin: 0 170px;
+    margin: auto;
 }
 
 .grid-fixed .c6 {
-    width: 460px;
-    margin: 0 10px;
+    width: 40%;
+    margin: 0px 0px 0px 120px;
     float: left;
 }
 
@@ -244,9 +244,9 @@ main section.welcome h1 {
 }
 
 main section.welcome img {
-    width: 80%;
-    padding: 50px 20px;
-    float: right;
+    width: 700px;
+    float: left;
+    margin: auto;
 }
 
 main section.resource {
@@ -288,4 +288,8 @@ main section.single {
 main section.single h1 {
     text-align: center;
     margin-bottom: 30px;
+}
+
+footer {
+  
 }
