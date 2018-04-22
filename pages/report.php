@@ -20,7 +20,7 @@ $result = $con->query($sql);
 
 if($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
-        $resources[$row['answer_id']] = array($row['text'], $row['link']);
+        $resources[$row['answer_id']][$row['answer_condition']] = array($row['text'], $row['link']);
     }
 } else { echo 'No Results'; }
 
@@ -40,7 +40,6 @@ if($result->num_rows > 0) {
 
         <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700" rel="stylesheet">
         <link href="css/app.css" type="text/css" rel="stylesheet">
-        <script src="../js/main.js"></script>
     </head>
 
     <body>
@@ -76,6 +75,7 @@ if($result->num_rows > 0) {
                       </section>
                       <section id="use_and_occ">
                         <h2>USE & OCCUPANCY PERMIT</h2>
+                        <section id="use_and_occ_data"></section>
                         <br></br>
                       </section>
                       <section id="other">
