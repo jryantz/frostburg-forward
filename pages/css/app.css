@@ -2,16 +2,16 @@
 
 .cf:before,
 .cf:after {
-    content:" ";
-    display:table;
+    content: " ";
+    display: table;
 }
 
 .cf:after {
-    clear:both;
+    clear: both;
 }
 
 .grid-fixed {
-    margin: 25px auto;
+    margin: 35px auto;
     width: 80%;
 }
 
@@ -35,8 +35,8 @@ nav.grid-fixed {
 }
 
 .grid-fixed .c6 {
-    width: 40%;
-    margin: 0px 0px 0px 120px;
+    width: calc(50% - 20px);
+    margin: 0 10px;
     float: left;
 }
 
@@ -195,44 +195,20 @@ header nav ul li a:hover {
 }
 
 main {
+    float: left;
     width: 100%;
-    position: absolute;
     margin-top: 75px;
 }
 
 main section {
-    position: relative;
     float: left;
     width: 100%;
-    overflow: hidden;
+    margin: 30px 0;
 }
 
 main section.color {
     background-color: rgba(196,31,64,1);
-    padding: 120px 0;
     color: white;
-}
-
-main section.color::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: -105px;
-    height: 200px;
-    width: 100%;
-    background-color: white;
-    /*transform: skewY(3deg);*/
-}
-
-main section.color::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -105px;
-    height: 200px;
-    width: 100%;
-    background-color: white;
-    /*transform: skewY(2deg);*/
 }
 
 main section.welcome {
@@ -244,13 +220,17 @@ main section.welcome h1 {
 }
 
 main section.welcome img {
-    width: 700px;
+    width: 100%;
     float: left;
     margin: auto;
 }
 
+main section.welcome div.title {
+
+}
+
 main section.resource {
-    margin: 0;
+
 }
 
 main section.resource div.content ul {
@@ -291,5 +271,16 @@ main section.single h1 {
 }
 
 footer {
-  
+    float: left;
+    background-color: #333;
+    width: 100%;
+}
+
+footer div {
+    padding: 40px 120px;
+}
+
+footer div p {
+    color: #eee;
+    text-align: right;
 }
