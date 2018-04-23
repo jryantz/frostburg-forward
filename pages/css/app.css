@@ -260,9 +260,7 @@ main section.call h1.header {
 }
 
 main section.single {
-    position: fixed;
-    top: 50%;
-    transform: translateY(-50%);
+
 }
 
 main section.single h1 {
@@ -272,7 +270,7 @@ main section.single h1 {
 
 footer {
     float: left;
-    background-color: #333;
+    /* background-color: #333; */
     width: 100%;
 }
 
@@ -281,6 +279,21 @@ footer div {
 }
 
 footer div p {
-    color: #eee;
+    color: #333;
     text-align: right;
+}
+
+footer div .seals {
+    width: 100%;
+    padding: 0;
+    margin-bottom: 30px;
+}
+
+footer div .seals img {
+    margin: 0 10px;
+    width: calc(24% - 20px);
+}
+
+#answerButtons .button a {
+    cursor: pointer;
 }
