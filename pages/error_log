@@ -1,0 +1,61 @@
+[23-Apr-2018 02:08:49 UTC] PHP Warning:  require_once(init.php): failed to open stream: No such file or directory in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 2
+[23-Apr-2018 02:08:49 UTC] PHP Fatal error:  require_once(): Failed opening required 'init.php' (include_path='.:/opt/alt/php71/usr/share/pear') in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 2
+[23-Apr-2018 02:08:55 UTC] PHP Warning:  require_once(init.php): failed to open stream: No such file or directory in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 2
+[23-Apr-2018 02:08:55 UTC] PHP Fatal error:  require_once(): Failed opening required 'init.php' (include_path='.:/opt/alt/php71/usr/share/pear') in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 2
+[23-Apr-2018 02:14:04 UTC] PHP Warning:  require_once(init.php): failed to open stream: No such file or directory in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 2
+[23-Apr-2018 02:14:04 UTC] PHP Fatal error:  require_once(): Failed opening required 'init.php' (include_path='.:/opt/alt/php71/usr/share/pear') in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 2
+[22-Apr-2018 22:18:53 America/New_York] PHP Warning:  mysqli::__construct(): (28000/1045): Access denied for user 'bizassistDBuser'@'localhost' (using password: YES) in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 9
+[22-Apr-2018 22:22:22 America/New_York] PHP Warning:  mysqli::__construct(): (28000/1045): Access denied for user 'bizassistDBuser'@'localhost' (using password: YES) in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 9
+[23-Apr-2018 03:21:07 UTC] PHP Notice:  Use of undefined constant localhost - assumed 'localhost' in /home/nbfx4u4o5u7k/public_html/pages/app/init.php on line 6
+[23-Apr-2018 03:21:07 UTC] PHP Notice:  Use of undefined constant bizassistDBuser - assumed 'bizassistDBuser' in /home/nbfx4u4o5u7k/public_html/pages/app/init.php on line 7
+[22-Apr-2018 23:21:07 America/New_York] PHP Warning:  mysqli::__construct(): (28000/1045): Access denied for user 'bizassistDBuser'@'localhost' (using password: YES) in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 9
+[23-Apr-2018 03:21:08 UTC] PHP Notice:  Use of undefined constant localhost - assumed 'localhost' in /home/nbfx4u4o5u7k/public_html/pages/app/init.php on line 6
+[23-Apr-2018 03:21:08 UTC] PHP Notice:  Use of undefined constant bizassistDBuser - assumed 'bizassistDBuser' in /home/nbfx4u4o5u7k/public_html/pages/app/init.php on line 7
+[22-Apr-2018 23:21:08 America/New_York] PHP Warning:  mysqli::__construct(): (28000/1045): Access denied for user 'bizassistDBuser'@'localhost' (using password: YES) in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 9
+[23-Apr-2018 03:21:09 UTC] PHP Notice:  Use of undefined constant localhost - assumed 'localhost' in /home/nbfx4u4o5u7k/public_html/pages/app/init.php on line 6
+[23-Apr-2018 03:21:09 UTC] PHP Notice:  Use of undefined constant bizassistDBuser - assumed 'bizassistDBuser' in /home/nbfx4u4o5u7k/public_html/pages/app/init.php on line 7
+[22-Apr-2018 23:21:09 America/New_York] PHP Warning:  mysqli::__construct(): (28000/1045): Access denied for user 'bizassistDBuser'@'localhost' (using password: YES) in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 9
+[23-Apr-2018 03:21:14 UTC] PHP Notice:  Use of undefined constant localhost - assumed 'localhost' in /home/nbfx4u4o5u7k/public_html/pages/app/init.php on line 6
+[23-Apr-2018 03:21:14 UTC] PHP Notice:  Use of undefined constant bizassistDBuser - assumed 'bizassistDBuser' in /home/nbfx4u4o5u7k/public_html/pages/app/init.php on line 7
+[22-Apr-2018 23:21:14 America/New_York] PHP Warning:  mysqli::__construct(): (28000/1045): Access denied for user 'bizassistDBuser'@'localhost' (using password: YES) in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 9
+[23-Apr-2018 03:21:38 UTC] PHP Notice:  Use of undefined constant localhost - assumed 'localhost' in /home/nbfx4u4o5u7k/public_html/pages/app/init.php on line 6
+[23-Apr-2018 03:21:38 UTC] PHP Notice:  Use of undefined constant bizassistDBuser - assumed 'bizassistDBuser' in /home/nbfx4u4o5u7k/public_html/pages/app/init.php on line 7
+[22-Apr-2018 23:21:38 America/New_York] PHP Warning:  mysqli::__construct(): (28000/1045): Access denied for user 'bizassistDBuser'@'localhost' (using password: YES) in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 9
+[23-Apr-2018 03:23:34 UTC] PHP Parse error:  syntax error, unexpected 'KnQAHaf' (T_STRING), expecting ',' or ')' in /home/nbfx4u4o5u7k/public_html/pages/app/init.php on line 8
+[23-Apr-2018 03:23:36 UTC] PHP Parse error:  syntax error, unexpected 'KnQAHaf' (T_STRING), expecting ',' or ')' in /home/nbfx4u4o5u7k/public_html/pages/app/init.php on line 8
+[23-Apr-2018 03:23:37 UTC] PHP Parse error:  syntax error, unexpected 'KnQAHaf' (T_STRING), expecting ',' or ')' in /home/nbfx4u4o5u7k/public_html/pages/app/init.php on line 8
+[23-Apr-2018 03:23:46 UTC] PHP Parse error:  syntax error, unexpected 'KnQAHaf' (T_STRING), expecting ',' or ')' in /home/nbfx4u4o5u7k/public_html/pages/app/init.php on line 8
+[22-Apr-2018 23:24:16 America/New_York] PHP Warning:  mysqli::__construct(): (28000/1045): Access denied for user 'bizassistDBuser'@'localhost' (using password: YES) in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 9
+[22-Apr-2018 23:25:51 America/New_York] PHP Warning:  mysqli::__construct(): (28000/1045): Access denied for user 'bizassistDBuser'@'localhost' (using password: YES) in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 9
+[22-Apr-2018 23:25:52 America/New_York] PHP Warning:  mysqli::__construct(): (28000/1045): Access denied for user 'bizassistDBuser'@'localhost' (using password: YES) in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 9
+[22-Apr-2018 23:25:52 America/New_York] PHP Warning:  mysqli::__construct(): (28000/1045): Access denied for user 'bizassistDBuser'@'localhost' (using password: YES) in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 9
+[22-Apr-2018 23:25:52 America/New_York] PHP Warning:  mysqli::__construct(): (28000/1045): Access denied for user 'bizassistDBuser'@'localhost' (using password: YES) in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 9
+[22-Apr-2018 23:26:59 America/New_York] PHP Warning:  mysqli::__construct(): (28000/1045): Access denied for user 'bizassistDBuser'@'localhost' (using password: YES) in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 9
+[22-Apr-2018 23:27:00 America/New_York] PHP Warning:  mysqli::__construct(): (28000/1045): Access denied for user 'bizassistDBuser'@'localhost' (using password: YES) in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 9
+[22-Apr-2018 23:27:00 America/New_York] PHP Warning:  mysqli::__construct(): (28000/1045): Access denied for user 'bizassistDBuser'@'localhost' (using password: YES) in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 9
+[22-Apr-2018 23:27:00 America/New_York] PHP Warning:  mysqli::__construct(): (28000/1045): Access denied for user 'bizassistDBuser'@'localhost' (using password: YES) in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 9
+[22-Apr-2018 23:27:07 America/New_York] PHP Warning:  mysqli::__construct(): (28000/1045): Access denied for user 'bizassistDBuser'@'localhost' (using password: YES) in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 9
+[22-Apr-2018 23:27:29 America/New_York] PHP Warning:  mysqli::__construct(): (28000/1045): Access denied for user 'bizassistDBuser'@'localhost' (using password: YES) in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 9
+[22-Apr-2018 23:27:30 America/New_York] PHP Warning:  mysqli::__construct(): (28000/1045): Access denied for user 'bizassistDBuser'@'localhost' (using password: YES) in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 9
+[22-Apr-2018 23:28:07 America/New_York] PHP Warning:  mysqli::__construct(): (28000/1045): Access denied for user 'bizassistDBuser'@'localhost' (using password: YES) in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 9
+[22-Apr-2018 23:28:08 America/New_York] PHP Warning:  mysqli::__construct(): (28000/1045): Access denied for user 'bizassistDBuser'@'localhost' (using password: YES) in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 9
+[22-Apr-2018 23:28:09 America/New_York] PHP Warning:  mysqli::__construct(): (28000/1045): Access denied for user 'bizassistDBuser'@'localhost' (using password: YES) in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 9
+[22-Apr-2018 23:28:43 America/New_York] PHP Warning:  mysqli::__construct(): (28000/1045): Access denied for user 'bizassistDBuser'@'localhost' (using password: YES) in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 9
+[22-Apr-2018 23:28:44 America/New_York] PHP Warning:  mysqli::__construct(): (28000/1045): Access denied for user 'bizassistDBuser'@'localhost' (using password: YES) in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 9
+[22-Apr-2018 23:31:45 America/New_York] PHP Warning:  mysqli::__construct(): (28000/1045): Access denied for user 'bizassistDBuser'@'localhost' (using password: YES) in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 9
+[22-Apr-2018 23:35:50 America/New_York] PHP Notice:  Trying to get property of non-object in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 21
+[22-Apr-2018 23:35:50 America/New_York] PHP Notice:  Trying to get property of non-object in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 32
+[22-Apr-2018 23:39:08 America/New_York] PHP Notice:  Trying to get property of non-object in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 21
+[22-Apr-2018 23:39:08 America/New_York] PHP Notice:  Trying to get property of non-object in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 32
+[22-Apr-2018 23:40:12 America/New_York] PHP Notice:  Trying to get property of non-object in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 21
+[22-Apr-2018 23:40:12 America/New_York] PHP Notice:  Trying to get property of non-object in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 32
+[22-Apr-2018 23:41:16 America/New_York] PHP Notice:  Trying to get property of non-object in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 21
+[22-Apr-2018 23:41:16 America/New_York] PHP Notice:  Trying to get property of non-object in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 32
+[22-Apr-2018 23:41:32 America/New_York] PHP Notice:  Trying to get property of non-object in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 21
+[22-Apr-2018 23:41:32 America/New_York] PHP Notice:  Trying to get property of non-object in /home/nbfx4u4o5u7k/public_html/pages/questions.php on line 32
+[22-Apr-2018 23:42:19 America/New_York] PHP Notice:  Trying to get property of non-object in /home/nbfx4u4o5u7k/public_html/pages/report.php on line 21
+[22-Apr-2018 23:48:23 America/New_York] PHP Notice:  Trying to get property of non-object in /home/nbfx4u4o5u7k/public_html/pages/report.php on line 21
+[23-Apr-2018 03:59:09 UTC] PHP Parse error:  syntax error, unexpected 'question_condition' (T_STRING), expecting ']' in /home/nbfx4u4o5u7k/public_html/pages/report.php on line 25
+[23-Apr-2018 03:59:23 UTC] PHP Parse error:  syntax error, unexpected 'question_condition' (T_STRING), expecting ']' in /home/nbfx4u4o5u7k/public_html/pages/report.php on line 25
+[23-Apr-2018 03:59:28 UTC] PHP Parse error:  syntax error, unexpected 'question_condition' (T_STRING), expecting ']' in /home/nbfx4u4o5u7k/public_html/pages/report.php on line 25
+[23-Apr-2018 00:21:05 America/New_York] PHP Notice:  Array to string conversion in /home/nbfx4u4o5u7k/public_html/pages/report.php on line 92

@@ -1,13 +1,13 @@
 <?php
-//require_once('init.php');
-$ser="localhost";
+require_once('app/init.php');
+/*$ser="localhost";
 $user="root";
 $password="WMDBizAssist";
-$db="frostburgforward";
+$db="frostburgforward";*/
 
 // Establishing a connection to the database.
-//$con = new mysqli(DB_HOST, DB_USER, DB_PASS);
-$con = new mysqli($ser, $user, $password, $db);
+$con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+//$con = new mysqli($ser, $user, $password, $db);
 
 // Check the connection to the database.
 if($con->connect_error) { die('Connection Failed: ' . $con->connect_error); }
@@ -59,7 +59,6 @@ if($result->num_rows > 0) {
         <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700" rel="stylesheet">
         <link href="css/app.css" type="text/css" rel="stylesheet">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="../js/main.js"></script>
 
         </script>
     </head>
@@ -67,10 +66,10 @@ if($result->num_rows > 0) {
     <body>
         <header>
             <nav class="grid-fixed">
-                <a href="index.html" class="title">Western Maryland BizAssist</a>
+                <a href="../index.html" class="title">Western Maryland BizAssist</a>
 
                 <ul>
-                    <li><a href="index.html">Home</a></li>
+                    <li><a href="../index.html">Home</a></li>
                     <li><a href="start.html">Business</a></li>
                     <li><a href="#">About</a></li>
                     <li><a href="#">Contact</a></li>
