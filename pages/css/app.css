@@ -96,6 +96,24 @@ input[type='text'] {
     transform: translateX(-50%);
 }
 
+input[type='email'] {
+    width: 60%;
+    padding: 10px;
+    border: 0;
+    outline: 0;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    box-shadow: -3px 1px 7px 0 rgba(0,0,0,0.2);
+    font-size: 18px;
+    line-height: 25px;
+    font-weight: 300;
+    position: relative;
+    left: calc(50% - 22.5px);
+    transform: translateX(-50%);
+}
+
 a.search {
     float: right;
     position: relative;

@@ -3,6 +3,21 @@
 <html>
 
 <head>
+    <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+    <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyBWxn3avVxaZly4ZRfcJ47Ddv00nOL5L1s",
+      authDomain: "wmd-bizassist.firebaseapp.com",
+      databaseURL: "https://wmd-bizassist.firebaseio.com",
+      projectId: "wmd-bizassist",
+      storageBucket: "",
+      messagingSenderId: "25335187061"
+    };
+    firebase.initializeApp(config);
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase-auth.js"></script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-118657595-1"></script>
     <script>
@@ -13,7 +28,7 @@
     gtag('config', 'UA-118657595-1');
     </script>
 
-    <title>BizAssist Quick Start Tool</title>
+    <title>WMD BizAssist Admin</title>
 
     <meta charset="utf-8">
     <meta name="description" content="">
@@ -27,7 +42,7 @@
 <body>
     <header>
         <nav class="grid-fixed">
-            <a href="../index.html" class="title">Western Maryland BizAssist</a>
+            <a href="../index.html" class="title">Western Maryland BizAssist Admin</a>
 
             <ul>
                 <li><a href="../index.html">Home</a></li>
@@ -42,13 +57,7 @@
         <section class="single color">
             <div class="grid-fixed cf">
                 <div class="c12">
-                    <h1>Welcome to the Frostburg Forward Business Development Tool!</h1>
-                    <p>This quick start tool will help you to obtain the resources you need to open a business in Western Maryland.</p>
-                    <br>
-                    <p>Once you have completed all of the questions, a report will be generated that will contain all of the information that you have entered. Please print this report - (or keep the report ID) - for future reference.</p>
-                    <div class="button">
-                        <a href="questions.php">Continue</a>
-                    </div>
+
                 </div>
             </div>
         </section>

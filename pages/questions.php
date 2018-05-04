@@ -1,9 +1,9 @@
 <?php
 require_once('app/init.php');
-/*$ser="localhost";
-$user="root";
-$password="WMDBizAssist";
-$db="frostburgforward";*/
+// $ser="localhost";
+// $user="root";
+// $password="WMDBizAssist";
+// $db="frostburgforward";
 
 // Establishing a connection to the database.
 $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
@@ -49,6 +49,16 @@ if($result->num_rows > 0) {
 <!doctype html>
 <html>
     <head>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-118657595-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-118657595-1');
+        </script>
+
         <title id="abc">BizAssist Quick Start Tool</title>
 
         <meta charset="utf-8">
