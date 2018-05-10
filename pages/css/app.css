@@ -277,6 +277,34 @@ main section.call h1.header {
     text-align: center;
 }
 
+main section.call h3 {
+    text-align: center;
+    color: rgba(196,31,64,1);
+}
+
+main section.call .cloud {
+    float: left;
+    margin: 40px 0;
+}
+
+main section.call .cloud img {
+    float: left;
+    height: 110px;
+    object-fit: cover;
+}
+
+main section.call .cloud .small {
+    width: 11.11%;
+}
+
+main section.call .cloud .medium {
+    width: 16.67%
+}
+
+main section.call .cloud .large {
+    width: 33.33%
+}
+
 main section.single {
 
 }
@@ -288,7 +316,7 @@ main section.single h1 {
 
 footer {
     float: left;
-    /* background-color: #333; */
+    background-color: #333;
     width: 100%;
 }
 
@@ -297,7 +325,7 @@ footer div {
 }
 
 footer div p {
-    color: #333;
+    color: #fff;
     text-align: right;
 }
 
