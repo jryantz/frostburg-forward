@@ -114,9 +114,8 @@ echo 'Connection Successful';
 
                 <ul>
                     <li><a href="../index.html">Home</a></li>
-                    <li><a href="start.html">Business</a></li>
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="start.html">Quick Start Tool</a></li>
+                    <li><a href="AboutUs.html">About</a></li>
                 </ul>
             </nav>
         </header>

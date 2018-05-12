@@ -1,9 +1,9 @@
 <?php
 require_once('app/init.php');
-// $ser="localhost";
-// $user="root";
-// $password="WMDBizAssist";
-// $db="frostburgforward";
+$ser="localhost";
+$user="root";
+$password="WMDBizAssist";
+$db="frostburgforward";
 
 // Establishing a connection to the database.
 $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
@@ -80,9 +80,8 @@ if($result->num_rows > 0) {
 
                 <ul>
                     <li><a href="../index.html">Home</a></li>
-                    <li><a href="start.html">Business</a></li>
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="start.html">Quick Start Tool</a></li>
+                    <li><a href="AboutUs.html">About</a></li>
                 </ul>
             </nav>
         </header>
@@ -107,7 +106,7 @@ if($result->num_rows > 0) {
 
           var questions = <?php echo json_encode($questions); ?>;
           var answers = <?php echo json_encode($answers); ?>;
-
+          console.log(answers);
 
           var currQuestion;
           var questionKeys = Object.keys(questions);
