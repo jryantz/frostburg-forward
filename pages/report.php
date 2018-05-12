@@ -345,24 +345,6 @@ echo 'Connection Successful';
           return regex.test(address);
         }
         </script>
-        <footer>
-            <div>
-                <div class="seals">
-                  <a href= "https://alleganyworks.org/">
-                      <img src="assets/County Econ Logo-CIRCLE.jpg">
-                  </a>
-                  <a href= "http://www.marylandsbdc.org/locations/western-region">
-                      <img src="assets/CitySeal.png">
-                  </a>
-                  <a href= "https://www.choosecumberland.org/">
-                      <img src="assets/CEDC_full-color.png">
-                  </a>
-                  <a href = "https://www.garrettcounty.org/">
-                      <img src="assets/Garrett-County-Seal-2.png">
-                  </a>
-                </div>
-                <p>Photo Credit: Gerald Snelson</p>
-            </div>
-        </footer>
+        <footer><div><p>Photo Credit: Gerald Snelson</p></div></footer>
     </body>
 </html>
