@@ -349,16 +349,16 @@ echo 'Connection Successful';
             <div>
                 <div class="seals">
                   <a href= "https://alleganyworks.org/">
-                      <img src="pages/assets/County Econ Logo-CIRCLE.jpg">
+                      <img src="assets/County Econ Logo-CIRCLE.jpg">
                   </a>
                   <a href= "http://www.marylandsbdc.org/locations/western-region">
-                      <img src="pages/assets/CitySeal.png">
+                      <img src="assets/CitySeal.png">
                   </a>
                   <a href= "https://www.choosecumberland.org/">
-                      <img src="pages/assets/CEDC_full-color.png">
+                      <img src="assets/CEDC_full-color.png">
                   </a>
                   <a href = "https://www.garrettcounty.org/">
-                      <img src="pages/assets/Garrett-County-Seal-2.png">
+                      <img src="assets/Garrett-County-Seal-2.png">
                   </a>
                 </div>
                 <p>Photo Credit: Gerald Snelson</p>
