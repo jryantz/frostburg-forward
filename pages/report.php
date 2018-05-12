@@ -1,28 +1,13 @@
 <?php
-
-//If POST parameters are set, submit the given parameters to the PHP mail function to send the report.
-if(isset($_POST['emailTo']) && isset($_POST['subject']) && isset($_POST['body']))
-{
-    $to = $_POST['emailTo'];
-    $subject = $_POST['subject'];
-    $body = $_POST['body'];
-
-    mail($to, $subject, $body);
-}
-
 require_once('app/init.php');
-// $ser="localhost";
-// $user="root";
-// $password="WMDBizAssist";
-// $db="frostburgforward";
+$ser="localhost";
+$user="root";
+$password="WMDBizAssist";
+$db="frostburgforward";
 
 // Establishing a connection to the database.
 $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 //$con = new mysqli($ser, $user, $password, $db);
-
-// Check the connection to the database.
-if($con->connect_error) { die('Connection Failed: ' . $con->connect_error); }
-echo 'Connection Successful';
 
 $resource_conditions = array();
 
@@ -31,17 +16,69 @@ $result = $con->query($sql);
 
 if($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
-      // if(isset($resource_conditions[$row['answer_id']])){
-      //   $newarray = array($row['id'], $row['tag'], $row['question_condition'], $row['answer_condition'], $row['text'], $row['link']);
-      //   array_push($resource_conditions[$row['answer_id']], $newarray);
-      // } else {
-      //   $resource_conditions[$row['answer_id']] = array();
-      //   array_push($resource_conditions[$row['answer_id']], array($row['id'], $row['tag'], $row['question_condition'], $row['answer_condition'], $row['text'], $row['link']));
-      // }
-      $resource_conditions[$row['answer_id']] = array($row['tag'], $row['question_condition'], $row['answer_condition'], $row['text'], $row['link']);
+      //var_dump($row);
+    $resource_conditions[$row['answer_id']][] = array(utf8_encode($row['text']), utf8_encode($row['link']), utf8_encode($row['condition']), $row['tag']);
     }
 } else { echo 'No Results'; }
 
+//If POST parameters are set, submit the given parameters to the PHP mail function to send the report.
+$report_id = "none";
+if(isset($_GET['report_id'])){
+  $report_id = $_GET['report_id'];
+  $queryStr = str_pad($report_id,6,"0",STR_PAD_LEFT);
+  $sql = "SELECT * FROM reports WHERE id=".$queryStr;
+  $result = $con->query($sql);
+  if($result->num_rows > 0) {
+      while($row = $result->fetch_assoc()) {
+        //var_dump($row);
+      $report = utf8_decode($row['report']);
+      $report = json_decode($report);
+      }
+  } else { echo 'No Results'; }
+}
+if(isset($_POST['reportArr'])){
+  echo 'Success';
+  $report = mysqli_real_escape_string($con, $_POST['reportArr']);
+  $report = json_encode($_POST['reportArr']);
+  $report = utf8_encode($report);
+}
+if(isset($_POST['emailInput']))
+{
+    $sql = "INSERT INTO `reports` (`report`) VALUES ('".$report."')";
+    if ($con->query($sql) === TRUE) {
+        echo "New record created successfully";
+    } else {
+        echo "Error: " . $sql . "<br>" . $con->error;
+    }
+
+    $sql = "SELECT MAX(`id`) FROM `reports`";
+    $result = $con->query($sql);
+    $row = $result->fetch_assoc();
+    $report_id = $row["MAX(`id`)"];
+
+    $to = $_POST['emailInput'];
+    $subject = "Your BizAssist Report";
+    $report_link = "https://wmdbizassist.org/pages/report.php?report_id=".$report_id;
+    $message = "Thank you for using WMD BizAssist. Click the link below to access your personal BizAssist report. \n\n" . $report_link;
+    $message = wordwrap($message, 70);
+    $headers = "From: donotreply@wmdbizassist.org";
+
+    mail($to, $subject, $message, $headers);
+
+    $sendToSBDC = isset($_POST['sendToSBDC']) ? 1 : 0;
+
+    if($sendToSBDC == 1){
+      $to = "adm.wmdbizassist@gmail.com";
+      $subject = "A new report has been generated. ID: ".$report_id;
+      $message = "The following BizAssist report has been generated, you can view it at the link below. \n\n".$report_link;
+      $message = wordwrap($message, 70);
+      mail($to, $subject, $message, $headers);
+    }
+}
+
+// Check the connection to the database.
+if($con->connect_error) { die('Connection Failed: ' . $con->connect_error); }
+echo 'Connection Successful';
 ?>
 
 <!doctype html>
@@ -103,22 +140,22 @@ if($result->num_rows > 0) {
                       </section>
                       <section id="basic_chk">
                         <h2>BASIC BUSINESS CHECKLIST FOR MARYLAND</h2>
-                        <section id="basic_chk_data"></section>
+                        <ul id="basic_chk_data"></ul>
                         <br></br>
                       </section>
                       <section id="site_selection">
                         <h2>SITE SELECTION</h2>
-                        <section id="site_selection_data"></section>
+                        <ul id="site_selection_data"></ul>
                         <br></br>
                       </section>
                       <section id="use_and_occ">
                         <h2>USE & OCCUPANCY PERMIT</h2>
-                        <section id="use_and_occ_data"></section>
+                        <ul id="use_and_occ_data"></ul>
                         <br></br>
                       </section>
                       <section id="other">
                         <h2>OTHER PERMITS & APPROVALS</h2>
-                        <section id="other_data"></section>
+                        <ul id="other_data"></ul>
                         <br></br>
                       </section>
                       <div class="button">
@@ -129,121 +166,185 @@ if($result->num_rows > 0) {
         </main>
 
         <script>
-           var session = JSON.parse(localStorage.getItem('session'));
-           var responses = session.responses;
-           var resource_conditions = <?php echo json_encode($resource_conditions); ?>;
-           console.log(session);
-           console.log(resource_conditions);
+        var session = JSON.parse(localStorage.getItem('session'));
+        if(session != null){
+          var responses = session.responses;
+        }
+        var resource_conditions;
+        var resource_conditions = <?php echo json_encode($resource_conditions); ?>;
+        var report = <?php echo json_encode($report) ?>;
+        console.log(report);
+        if(report == null) {
+          report = generateReport();
+        }
+        setReportContent();
 
-           for(var ans in responses){
-           	if(responses.hasOwnProperty(ans)){
-           		var answer = responses[ans];
-           		for(var ans_id in resource_conditions){
-           			if(ans_id == answer) {
-           				var div = document.createElement("div");
-           				var p = document.createElement("p");
-           				p.innerHTML = resource_conditions[ans_id][3];
-           				var a;
-           				if(resource_conditions[ans_id][4] != null){
-           					a = document.createElement("a");
-           					a.innerHTML = resource_conditions[ans_id][4];
-           					a.href = resource_conditions[ans_id][4];
-           				}
-           				div.appendChild(p);
-           				if(a != null){
-           					div.appendChild(a);
-           				}
-           				var br = document.createElement("br");
-           				var tag = resource_conditions[ans_id][0];
-	           			switch(tag){
-	           				case 'basic_chk':
-	           					document.getElementById("basic_chk_data").appendChild(div);
-	           					document.getElementById("basic_chk_data").appendChild(br);
-	           					break;
-	           				case 'site_selection':
-	           					document.getElementById("site_selection_data").appendChild(div);
-	           					document.getElementById("site_selection_data").appendChild(br);
-	           					break;
-	           				case 'use_and_occ':
-	           					document.getElementById("use_and_occ_data").appendChild(div);
-	           					document.getElementById("use_and_occ_data").appendChild(br);
-	           					break;
-	           				case 'other':
-	           					document.getElementById("other_data").appendChild(div);
-	           					document.getElementById("other_data").appendChild(br);
-	           					break;
-	           				default :
+        $(document).ready(function(){
+        });
 
-	           			}
-           			}
-           		}
-           	}
-           }
-
-           function showContact(){
-             if(!document.getElementById("contact_form")){
-               var div = document.createElement("div");
-               div.id = "contact_form";
-               div.className = "resource";
-
-               var input = document.createElement("input");
-               input.type = "email";
-               input.id = "emailInput";
-               input.placeholder = "Enter your e-mail address (Optional)";
-
-               var submitDiv = document.createElement("div");
-               submitDiv.className = "button";
-               var a = document.createElement("a");
-               a.href = "javascript:sendEmail()"
-               a.innerHTML = "Send";
-               submitDiv.appendChild(a);
-
-               div.appendChild(input);
-               div.appendChild(submitDiv);
-
-               document.getElementById("contact_div").appendChild(div);
-               div.style.display = "none";
-             }
-             var e = document.getElementById("contact_form");
-             if(e.style.display === "none"){
-               e.style.display = "block";
-             } else {
-               e.style.display = "none";
-             }
-           }
-
-           function sendEmail(){
-             var to = document.getElementById("emailInput").value;
-             var subject = "Your BizAssist Report";
-             var body = "";
-             if(validate(to)){
-               jQuery.ajax({
-                   url: "",
-                   type: 'POST',
-                   data: JSON.stringify({ emailTo: to, subject: subject, body: body }),
-                   cache: false
-                }).done(function(){
-                  <?php if(isset($_POST['emailTo']) && isset($_POST['subject']) && isset($_POST['body']))
-                  {
-                      $to = $_POST['emailTo'];
-                      $subject = $_POST['subject'];
-                      $body = $_POST['body'];
-                      $headers = 'From: reports@wmdbizassist.org' . "\r\n";
-                      $headers .= "To: $to\r\n";
-
-                      mail($to, $subject, $body, $headers);
-                  } ?>;
-                });
-                window.location.href = "";
-              } else {
-                alert("Please enter a valid email address");
+        function generateReport(){
+          report = [];
+          for(var ans in responses){
+            if(responses.hasOwnProperty(ans)){
+              var answer = responses[ans];
+              for(var ans_id in resource_conditions){
+                if(ans_id == answer) {
+                  for(var i=0; i<resource_conditions[ans_id].length; i++){
+                    var entry = resource_conditions[ans_id][i];
+                    if(entry[2] != ""){
+                      var jsonObj = JSON.parse(entry[2]);
+                      var conditions = jsonObj.conditions;
+                      for(var i=0; i<conditions.length; i++){
+                        for(var ans in responses){
+                          if(conditions[i].question == ans){
+                            if(conditions[i].answer == responses[ans]){
+                              console.log(conditions[i].text);
+                              console.log(conditions[i].link);
+                              report.push([entry[3], conditions[i].text, conditions[i].link]);
+                            }
+                          }
+                        }
+                      }
+                    } else {
+                      report.push([entry[3], entry[0], entry[1]]);
+                    }
+                  }
+                }
               }
-           }
+            }
+          }
+          return report;
+        }
 
-           function validate(address){
-             var regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-             return regex.test(address);
-           }
+        function setReportContent(){
+          for(var i=0; i<report.length; i++){
+            var entry = report[i];
+            console.log(entry[2]);
+            var li = document.createElement("li");
+            var div = document.createElement("div");
+            var p = document.createElement("p");
+            p.innerHTML = entry[1];
+            var a;
+            if(entry[2] != ""){
+              a = document.createElement("a");
+              a.innerHTML = entry[2];
+              a.href = entry[2];
+            }
+            div.appendChild(p);
+            if(a != null){
+              div.appendChild(a);
+            }
+            var br = document.createElement("br");
+            li.appendChild(div);
+            li.appendChild(br);
+            var tag = entry[0];
+            switch(tag){
+              case 'basic_chk':
+              // document.getElementById("basic_chk_data").appendChild(div);
+              // document.getElementById("basic_chk_data").appendChild(br);
+              document.getElementById("basic_chk_data").appendChild(li);
+              break;
+              case 'site_selection':
+              // document.getElementById("site_selection_data").appendChild(div);
+              // document.getElementById("site_selection_data").appendChild(br);
+              document.getElementById("site_selection_data").appendChild(li);
+              break;
+              case 'use_and_occ':
+              //document.getElementById("use_and_occ_data").appendChild(div);
+              //document.getElementById("use_and_occ_data").appendChild(br);
+              document.getElementById("use_and_occ_data").appendChild(li);
+              break;
+              case 'other':
+              //document.getElementById("other_data").appendChild(div);
+              //document.getElementById("other_data").appendChild(br);
+              document.getElementById("other_data").appendChild(li);
+              break;
+              default :
+            }
+          }
+        }
+
+        function showContact(){
+          if(!document.getElementById("contact_form")){
+            var form = document.createElement("form");
+            form.action = "";
+            form.method = "POST";
+            form.id = "contact_form";
+
+
+            var input = document.createElement("input");
+            input.type = "email";
+            input.name = "emailInput";
+            input.id = "emailInput";
+            input.placeholder = "Enter your e-mail address (Optional)";
+            var br = document.createElement("br");
+            var br1 = document.createElement("br");
+
+            var check = document.createElement("input");
+            check.type = "checkbox";
+            check.id = "sendToSBDC";
+            check.name = "sendToSBDC";
+
+            var reportInput = document.createElement("input");
+            reportInput.type = "hidden";
+            reportInput.name = "reportArr";
+            reportInput.value = report;
+
+            var submit = document.createElement("input");
+            submit.type = "submit";
+            submit.id = "submitContact";
+            submit.value = "Send";
+
+            form.appendChild(input);
+            form.appendChild(br);
+            form.appendChild(check);
+            form.appendChild(br1);
+            form.appendChild(reportInput);
+            form.appendChild(submit);
+
+            document.getElementById("contact_div").appendChild(form);
+            form.style.display = "none";
+          }
+          var e = document.getElementById("contact_form");
+          if(e.style.display === "none"){
+            e.style.display = "block";
+          } else {
+            e.style.display = "none";
+          }
+        }
+
+        function sendEmail(){
+          var to = document.getElementById("emailInput").value;
+          var subject = "Your BizAssist Report";
+          var body = "";
+          if(validate(to)){
+            jQuery.ajax({
+              url: "",
+              type: 'POST',
+              data: JSON.stringify({ subject: subject, body: body }),
+              cache: false
+            }).done(function(){
+              <?php if(isset($_POST['emailTo']) && isset($_POST['subject']) && isset($_POST['body']))
+              {
+                $to = $_POST['emailTo'];
+                $subject = $_POST['subject'];
+                $body = $_POST['body'];
+                $headers = 'From: reports@wmdbizassist.org' . "\r\n";
+                $headers .= "To: $to\r\n";
+
+                mail($to, $subject, $body, $headers);
+              } ?>;
+            });
+            window.location.href = "";
+          } else {
+            alert("Please enter a valid email address");
+          }
+        }
+
+        function validate(address){
+          var regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          return regex.test(address);
+        }
         </script>
         <footer><div><p>Photo Credit: Gerald Snelson</p></div></footer>
     </body>
