@@ -283,6 +283,7 @@ echo 'Connection Successful';
             check.type = "checkbox";
             check.id = "sendToSBDC";
             check.name = "sendToSBDC";
+            check.placeholder = "I would like my information to be sent to the Maryland Small Business Development Center";
 
             var reportInput = document.createElement("input");
             reportInput.type = "hidden";
@@ -345,6 +346,6 @@ echo 'Connection Successful';
           return regex.test(address);
         }
         </script>
-        <footer><div><p>Photo Credit: Gerald Snelson</p></div></footer>
+        <footer><div></div></footer>
     </body>
 </html>

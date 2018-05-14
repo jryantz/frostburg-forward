@@ -114,6 +114,14 @@ input[type='email'] {
     transform: translateX(-50%);
 }
 
+input[type='checkbox'] {
+    float: left;
+}
+
+a.class {
+    color: white;
+}
+
 a.search {
     float: right;
     position: relative;
@@ -342,4 +350,17 @@ footer div .seals img {
 
 #answerButtons .button a {
     cursor: pointer;
+}
+
+#submitContact .button {
+  display: inline-block;
+  box-sizing: border-box;
+  background-color: #fff;
+  color: rgba(196,31,64,1);
+  line-height: 40px;
+  padding: 0 38px;
+  text-decoration: none;
+  border-radius: 3px;
+  transition: 0.2s all;
+
 }
