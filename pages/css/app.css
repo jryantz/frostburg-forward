@@ -404,3 +404,23 @@ section#content_interface input[type='text'] {
     left: calc(50% - 22.5px);
     transform: translateX(-50%);
 }
+
+#submitContact .button {
+    display: inline-block;
+    box-sizing: border-box;
+    background-color: #fff;
+    color: rgba(196,31,64,1);
+    line-height: 40px;
+    padding: 0 38px;
+    text-decoration: none;
+    border-radius: 3px;
+    transition: 0.2s all;
+}
+
+input[type='checkbox'] {
+    float: left;
+}
+
+a.class {
+    color: white;
+}
