@@ -30,9 +30,20 @@ if(isset($_GET['report_id'])){
   $result = $con->query($sql);
   if($result->num_rows > 0) {
       while($row = $result->fetch_assoc()) {
-        //var_dump($row);
-      $report = utf8_decode($row['report']);
-      $report = json_decode($report);
+        $reportFromDB = str_getcsv($row['report'], ",", '"');
+        $report = array();
+        $size = count($reportFromDB);
+        $count = 0;
+        echo $size;
+        while($count < $size){
+          echo $count;
+          $report_item = array();
+          for($j=0; $j<3; $j++){
+            array_push($report_item, $reportFromDB[$count+$j]);
+          }
+          array_push($report, $report_item);
+          $count+=3;
+        }
       }
   } else { echo 'No Results'; }
 }
@@ -197,32 +208,32 @@ echo 'Connection Successful';
                         for(var ans in responses){
                           if(conditions[i].question == ans){
                             if(conditions[i].answer == responses[ans]){
-                              console.log(conditions[i].text);
-                              console.log(conditions[i].link);
-                              report.push([entry[3], conditions[i].text, conditions[i].link]);
+                              report.push([entry[3]+'\"', '\"'+conditions[i].text+'\"', conditions[i].link]);
                             }
                           }
                         }
                       }
                     } else {
-                      report.push([entry[3], entry[0], entry[1]]);
+                      report.push([entry[3]+'\"', '\"'+entry[0]+'\"', entry[1]]);
                     }
                   }
                 }
               }
             }
           }
+          console.log(report);
           return report;
         }
 
         function setReportContent(){
           for(var i=0; i<report.length; i++){
             var entry = report[i];
-            console.log(entry[2]);
+            console.log(entry);
             var li = document.createElement("li");
             var div = document.createElement("div");
             var p = document.createElement("p");
             p.innerHTML = entry[1];
+            console.log(p);
             var a;
             if(entry[2] != ""){
               a = document.createElement("a");
@@ -237,7 +248,7 @@ echo 'Connection Successful';
             var br = document.createElement("br");
             li.appendChild(div);
             li.appendChild(br);
-            var tag = entry[0];
+            var tag = entry[0].replace("\"", "");
             switch(tag){
               case 'basic_chk':
               // document.getElementById("basic_chk_data").appendChild(div);
@@ -250,6 +261,7 @@ echo 'Connection Successful';
               document.getElementById("site_selection_data").appendChild(li);
               break;
               case 'use_and_occ':
+              console.log("hi");
               //document.getElementById("use_and_occ_data").appendChild(div);
               //document.getElementById("use_and_occ_data").appendChild(br);
               document.getElementById("use_and_occ_data").appendChild(li);
