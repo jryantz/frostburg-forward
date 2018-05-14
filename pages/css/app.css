@@ -405,7 +405,7 @@ section#content_interface input[type='text'] {
     transform: translateX(-50%);
 }
 
-#submitContact .button {
+input[type='submit']#submitContact {
     display: inline-block;
     box-sizing: border-box;
     background-color: #fff;
@@ -415,12 +415,21 @@ section#content_interface input[type='text'] {
     text-decoration: none;
     border-radius: 3px;
     transition: 0.2s all;
+    margin: auto;
+}
+
+label {
+    text-align: left;
 }
 
 input[type='checkbox'] {
-    float: left;
+    margin: auto;
 }
 
 a#report_link {
     color: white;
+}
+
+form#contact_form {
+    margin: auto 0px;
 }

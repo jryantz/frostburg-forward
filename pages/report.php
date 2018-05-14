@@ -279,12 +279,16 @@ echo 'Connection Successful';
             input.placeholder = "Enter your e-mail address (Optional)";
             var br = document.createElement("br");
             var br1 = document.createElement("br");
+            var br2 = document.createElement("br");
+
+            var label = document.createElement("label");
+            label.for = "sendToSBDC";
+            label.innerHTML = "I would like my information to be sent to the Maryland Small Business Development Center";
 
             var check = document.createElement("input");
             check.type = "checkbox";
             check.id = "sendToSBDC";
             check.name = "sendToSBDC";
-            check.placeholder = "I would like my information to be sent to the Maryland Small Business Development Center";
 
             var reportInput = document.createElement("input");
             reportInput.type = "hidden";
@@ -298,8 +302,11 @@ echo 'Connection Successful';
 
             form.appendChild(input);
             form.appendChild(br);
-            form.appendChild(check);
             form.appendChild(br1);
+            form.appendChild(br2);
+            form.appendChild(label);
+            form.appendChild(check);
+            form.appendChild(br);
             form.appendChild(reportInput);
             form.appendChild(submit);
 
