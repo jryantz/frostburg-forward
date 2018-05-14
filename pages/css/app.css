@@ -421,6 +421,6 @@ input[type='checkbox'] {
     float: left;
 }
 
-a.class {
+a#report_link {
     color: white;
 }

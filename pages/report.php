@@ -134,7 +134,7 @@ echo 'Connection Successful';
                     <div id="report_div" class="c12">
                       <section id="disclaimer">
                         <h2>*** THIS INFORMATION IS IN REGARDS TO LOCAL REGUALTIONS IN REGARDS TO OPENING A BUSINESS. THERE ARE FEDERAL AND STATE REGULATIONS THAT GOVERN BUSINESSES AND A GOOD RESOURCE FOR MORE INFORMATION IS:</h2>
-                        <a href="https://businessexpress.maryland.gov"><strong>https://businessexpress.maryland.gov</strong></a>
+                        <a id="report_link" href="https://businessexpress.maryland.gov"><strong>https://businessexpress.maryland.gov</strong></a>
                         <br></br>
                       </section>
                       <section id="basic_chk">
@@ -226,6 +226,7 @@ echo 'Connection Successful';
             var a;
             if(entry[2] != ""){
               a = document.createElement("a");
+              a.id = "report_link";
               a.innerHTML = entry[2];
               a.href = entry[2];
             }
