@@ -314,6 +314,43 @@ main section.single h1 {
     margin-bottom: 30px;
 }
 
+main section.bios {
+
+}
+
+main section.bios h2 {
+  text-align: center;
+}
+
+
+main section.bios div.biogrid {
+    float: right;
+}
+
+main section.bios div.biogrid img {
+    position: absolute;
+    left: 30px;
+    height: 100px;
+    padding: 175px 0;
+
+}
+
+main section.bios  ul {
+    display:inline-block;
+    flex-direction:row;
+    justify-content:flex-start;
+    list-style:none;
+    padding: 0;
+    white-space:normal;
+}
+
+main section.bios li {
+    padding-top: 40px;
+    padding-bottom: 15px;
+    padding-right: 40px;
+    padding-left: 40px;
+}
+
 footer {
     float: left;
     background-color: #333;
