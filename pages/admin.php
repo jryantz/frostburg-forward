@@ -13,24 +13,63 @@ $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 if($con->connect_error) { die('Connection Failed: ' . $con->connect_error); }
 echo 'Connection Successful';
 
-if(isset($_POST['question_number']) && isset($_POST['question_text']) && isset($_POST['submit_add'])){
-  $q_num = $_POST['question_number'];
-  $q_text = $_POST['question_text'];
-  $sql = "INSERT INTO `questions` (`id`, `question`) VALUES ('".$q_num."', '".$q_text."')";
+if(isset($_POST['add_question_number']) && isset($_POST['add_question_text']) && isset($_POST['submit_add_q']) && isset($_POST['add_q_id'])){ //Query handler for adding questions
+  $q_num = $_POST['add_question_number'];
+  $q_text = $_POST['add_question_text'];
+  $sql = "INSERT INTO `questions` (`id`, `question`) VALUES (".$q_num.", '".$q_text."')";
   if(isset($_POST['condition_chk']) && $_POST['condition_chk'] == 'yes'){
     if(isset($_POST['to_q']) && isset($_POST['if_q']) && isset($_POST['a_is'])){
-      //$jsonCaseStr = "{""cases"": [{""to"": ".$_POST['to_q'].", ""answer_condition"": ".$_POST['a_is'].", ""question_condition"": ".$_POST['if_q']."}, {""to"": ".($q_num+1).", ""answer_condition"": ""DEFAULT"", ""question_condition"": ""DEFAULT""}]}";
+      //$jsonCaseStr = "{\"cases\": [{""\"to\": ".$_POST['to_q'].", \"answer_condition\": ".$_POST['a_is'].", \"question_condition\": ".$_POST['if_q']."}, {\"to\": ".($q_num+1).", \"answer_condition\": \"DEFAULT\", \"question_condition\": \"DEFAULT\"}]}";
+      $jsonCaseStr = "{}";
+      $jsonCaseStr = utf8_encode($jsonCaseStr);
+    }
+    $sql = "INSERT INTO `questions` VALUES (".$q_num.", '".$q_text."', '".$jsonCaseStr."')";
+  }
+  if ($con->query($sql) === TRUE) {
+      alert("Entry Added Successfully");
+  } else {
+      alert("Error: " . $sql . "<br>" . $con->error);
+  }
+}
+
+if(isset($_POST['modify_question_number']) && isset($_POST['modify_question_text']) && isset($_POST['submit_modify_question']) && isset($_POST['mod_q_id'])){ //Query handler for modifying questions
+  $q_num = $_POST['modify_question_number'];
+  $q_text = $_POST['modify_question_text'];
+  $q_id = $_POST['mod_q_id'];
+  $sql = "UPDATE `questions` SET id=".$q_num.", `question`='".$q_text."' WHERE id=".$q_id."";
+  if(isset($_POST['condition_chk']) && $_POST['condition_chk'] == 'yes'){
+    if(isset($_POST['to_q']) && isset($_POST['if_q']) && isset($_POST['a_is'])){
+      //$jsonCaseStr = "{"cases"": [{""to"": ".$_POST['to_q'].", ""answer_condition"": ".$_POST['a_is'].", ""question_condition"": ".$_POST['if_q']."}, {""to"": ".($q_num+1).", ""answer_condition"": ""DEFAULT"", ""question_condition"": ""DEFAULT""}]}";
       $jsonCaseStr = "{}";
         $jsonCaseStr = utf8_encode($jsonCaseStr);
     }
-    $sql = "INSERT INTO `questions` VALUES ('".$q_num."', '".$q_text."', '".$jsonCaseStr."')";
+    $sql = "UPDATE `questions` SET `id`=".$q_num.", `question`=".$q_text.", `flow`=".$jsonCaseStr." WHERE id=".$q_id."";
   }
   if ($con->query($sql) === TRUE) {
-      echo "New record created successfully";
+      alert("Entry Modified Successfully");
   } else {
-      echo "Error: " . $sql . "<br>" . $con->error;
+      alert("Error: " . $sql . "<br>" . $con->error);
   }
 }
+
+// if(isset($_POST['remove_question_number']) && isset($_POST['remove_question_text']) && isset($_POST['submit_delete_question']) && isset($_POST['rem_q_id'])){ //Query handler for modifying questions
+//   $q_num = $_POST['remove_question_number'];
+//   $q_text = $_POST['remove_question_text'];
+//   $sql = "UPDATE `questions` SET id=".$q_num.", question=".$q_text." WHERE id=".."";
+//   if(isset($_POST['condition_chk']) && $_POST['condition_chk'] == 'yes'){
+//     if(isset($_POST['to_q']) && isset($_POST['if_q']) && isset($_POST['a_is'])){
+//       //$jsonCaseStr = "{"cases"": [{""to"": ".$_POST['to_q'].", ""answer_condition"": ".$_POST['a_is'].", ""question_condition"": ".$_POST['if_q']."}, {""to"": ".($q_num+1).", ""answer_condition"": ""DEFAULT"", ""question_condition"": ""DEFAULT""}]}";
+//       $jsonCaseStr = "{}";
+//         $jsonCaseStr = utf8_encode($jsonCaseStr);
+//     }
+//     $sql = "INSERT INTO `questions` VALUES (".$q_num.", '".$q_text."', '".$jsonCaseStr."')";
+//   }
+//   if ($con->query($sql) === TRUE) {
+//       alert("Entry Deleted Successfully");
+//   } else {
+//       alert("Error: " . $sql . "<br>" . $con->error);
+//   }
+// }
 
 $questions = array();
 $sql = "SELECT * FROM questions";
@@ -59,6 +98,9 @@ if($result->num_rows > 0) {
     }
 } else { echo 'No Results'; }
 
+function alert($msg) {
+    echo "<script type='text/javascript'>alert('$msg');</script>";
+}
 ?>
 <html>
   <head>
@@ -142,122 +184,205 @@ if($result->num_rows > 0) {
               </li>
             </ul>
             <ul id="action_buttons">
-              <button onclick="add();">Add</button>
-              <button onclick="modify();">Modify</button>
-              <button onclick="remove();">Remove</button>
+              <button class="action_button" onclick="add();">Add</button>
+              <button class="action_button" onclick="modify();">Modify</button>
+              <button class="action_button" onclick="remove();">Remove</button>
             </ul>
             <section id="content_interface">
               <form id="interface_form" method="post">
                 <div id="q_add" style="display:none">
-                  <label for="q_num">Question Number</label>
-                  <input type="number" name="question_number" id="q_num"><br>
-                  <label for="q_text">Question Text</label>
-                  <input type="text" name="question_text" id="q_text"><br>
-                  <label for="cond_chk">Conditions</label>
-                  <input type="checkbox" name="condition_chk" id="cond_chk" value="yes"><br>
-                  <div id="cond_div" style="display:none">
-                    <label for="to_q">To:</label>
-                    <input type="number" name="to_q" id="to_q">
-                    <label for="if_q">If Question </label>
-                    <input type="number" name="if_q" id="if_q">
-                    <label for="a_is">Answer Is: </label>
-                    <input type="number" name="a_is" id="a_is">
+                  <input type="hidden" name="add_q_id" id="add_q_id">
+                  <div class="form_element_container">
+                    <label for="q_num">Question Number</label>
+                    <input class="number" type="number" name="add_question_number" id="q_num"><br>
                   </div>
-                  <input type="submit" name="submit_add" id="submit_q" value="Add Question">
+                  <div class="form_element_container">
+                    <label for="q_text">Question Text</label>
+                    <input  type="text" name="add_question_text" id="q_text"><br>
+                  </div>
+                  <div class="form_element_container">
+                    <label for="cond_chk">Conditions</label>
+                    <input type="checkbox" name="condition_chk" id="cond_chk" value="yes"><br>
+                  </div>
+                  <div class="form_element_container">
+                    <div id="cond_div" style="display:none">
+                      <label for="to_q">To:</label>
+                      <input class="number"  type="number" name="to_q" id="to_q">
+                      <label for="if_q">If Question </label>
+                      <input class="number"  type="number" name="if_q" id="if_q">
+                      <label for="a_is">Answer Is: </label>
+                      <input class="number"  type="number" name="a_is" id="a_is">
+                    </div>
+                  </div>
+                  <div class="submit_div">
+                    <input class="admin_submit" type="submit" name="submit_add_q" id="submit_q" value="Add Question">
+                  </div>
                 </div>
                 <div id="q_modify" style="display:none">
-                  <label for="q_m_num">Question Number</label>
-                  <input type="number" name="question_number" id="q_m_num"><br>
-                  <label for="q_m_text">Question Text</label>
-                  <input type="text" name="question_text" id="q_m_text"><br>
-                  <div id="cond_div">
+                  <input type="hidden" name="mod_q_id" id="mod_q_id">
+                  <div class="form_element_container">
+                    <label for="q_m_num">Question Number</label>
+                    <input class="number"  type="number" name="modify_question_number" id="q_m_num"><br>
                   </div>
-                  <input type="submit" name="submit_modify" id="submit_mod_q" value="Submit Changes">
+                  <div class="form_element_container">
+                    <label for="q_m_text">Question Text</label>
+                    <input  type="text" name="modify_question_text" id="q_m_text"><br>
+                  </div>
+                  <div class="form_element_container">
+                    <div id="cond_div">
+                    </div>
+                  </div>
+                  <div class="submit_div">
+                    <input class="admin_submit" type="submit" name="submit_modify_question" id="submit_mod_q" value="Submit Changes">
+                  </div>
                 </div>
                 <div id="q_remove" style="display:none">
-                  <label for="q_r_num">Question Number</label>
-                  <input type="number" name="question_number" id="q_r_num" readonly><br>
-                  <label for="q_r_text">Question Text</label>
-                  <input type="text" name="question_text" id="q_r_text" readonly><br>
-                  <div id="cond_div" readonly>
+                  <input type="hidden" name="rem_q_id" id="rem_q_id">
+                  <div class="form_element_container">
+                    <label for="q_r_num">Question Number</label>
+                    <input class="number"  type="number" name="remove_question_number" id="q_r_num" readonly><br>
                   </div>
-                  <input type="submit" name="submit_delete" id="submit_del_q" value="Confirm Delete">
+                  <div class="form_element_container">
+                    <label for="q_r_text">Question Text</label>
+                    <input  type="text" name="remove_question_text" id="q_r_text" readonly><br>
+                  </div>
+                  <div class="form_element_container">
+                    <div id="cond_div" readonly>
+                    </div>
+                  </div>
+                  <div class="submit_div">
+                    <input class="admin_submit" type="submit" name="submit_delete_question" id="submit_del_q" value="Confirm Delete">
+                  </div>
                 </div>
                 <div id="a_add" style="display:none">
-                  <label for="a_q_num">For Question</label>
-                  <input type="number" name="question_number" id="a_q_num"><br>
-                  <label for="a_text">Answer Text</label>
-                  <input type="text" name="answer_text" id="a_text"><br>
-                  <input type="submit" name="submit_add" id="submit_a" value="Add Answer">
+                  <input type="hidden" name="add_a_id" id="add_a_id">
+                  <div class="form_element_container">
+                    <label for="a_q_num">For Question</label>
+                    <input class="number"  type="number" name="question_number" id="a_q_num"><br>
+                  </div>
+                  <div class="form_element_container">
+                    <label for="a_text">Answer Text</label>
+                    <input  type="text" name="answer_text" id="a_text"><br>
+                  </div>
+                  <div class="submit_div">
+                    <input class="admin_submit" type="submit" name="submit_add" id="submit_a" value="Add Answer">
+                  </div>
                 </div>
                 <div id="a_modify" style="display:none">
-                  <label for="a_q_m_num">For Question</label>
-                  <input type="number" name="question_number" id="a_q_m_num"><br>
-                  <label for="a_m_text">Answer Text</label>
-                  <input type="text" name="answer_text" id="a_m_text"><br>
-                  <input type="submit" name="submit_add" id="submit_mod_a" value="Submit Changes">
+                  <input type="hidden" name="mod_a_id" id="mod_a_id">
+                  <div class="form_element_container">
+                    <label for="a_q_m_num">For Question</label>
+                    <input class="number"  type="number" name="question_number" id="a_q_m_num"><br>
+                  </div>
+                  <div class="form_element_container">
+                    <label for="a_m_text">Answer Text</label>
+                    <input  type="text" name="answer_text" id="a_m_text"><br>
+                  </div>
+                  <div class="submit_div">
+                    <input class="admin_submit" type="submit" name="submit_add" id="submit_mod_a" value="Submit Changes">
+                  </div>
                 </div>
                 <div id="a_remove" style="display:none">
-                  <label for="a_q_r_num">For Question</label>
-                  <input type="number" name="question_number" id="a_q_r_num" readonly><br>
-                  <label for="a_r_text">Answer Text</label>
-                  <input type="text" name="answer_text" id="a_r_text" readonly><br>
-                  <input type="submit" name="submit_del_a" id="submit_del_a" value="Confirm Delete">
+                  <input type="hidden" name="rem_a_id" id="rem_a_id">
+                  <div class="form_element_container">
+                    <label for="a_q_r_num">For Question</label>
+                    <input class="number"  type="number" name="question_number" id="a_q_r_num" readonly><br>
+                  </div>
+                  <div class="form_element_container">
+                    <label for="a_r_text">Answer Text</label>
+                    <input  type="text" name="answer_text" id="a_r_text" readonly><br>
+                  </div>
+                  <div class="submit_div">
+                    <input class="admin_submit" type="submit" name="submit_del_a" id="submit_del_a" value="Confirm Delete">
+                  </div>
                 </div>
                 <div id="r_add" style="display:none">
+                  <input type="hidden" name="add_r_id" id="add_r_id">
                     <div id="resource_view">
                       <div id="resource_interface">
-                        <label for="r_tag_sel">Tag</label>
-                        <select id="r_tag_sel"></select><br>
-                        <label for="a_q_num">Text</label>
-                        <input type="text" name="resource_text" id="a_r_text"><br>
-                        <label for="a_text">Link</label>
-                        <input type="text" name="resource_link" id="a_r_link"><br>
-                        <label for="for_q">For Question </label>
-                        <input type="number" name="for_question" id="for_q">
-                        <label for="for_a">Answer: </label>
-                        <input type="number" name="for_answer" id="for_a">
+                        <div class="form_element_container">
+                          <label for="r_tag_sel">Tag</label>
+                          <select class="tag_select" id="r_tag_sel"></select><br>
+                        </div>
+                        <div class="form_element_container">
+                          <label for="a_q_num">Text</label>
+                          <input  type="text" name="resource_text" id="a_r_text"><br>
+                        </div>
+                        <div class="form_element_container">
+                          <label for="a_text">Link</label>
+                          <input  type="text" name="resource_link" id="a_r_link"><br>
+                        </div>
+                        <div class="form_element_container">
+                          <label for="for_q">For Question </label>
+                          <input class="number"  type="number" name="for_question" id="for_q">
+                          <label for="for_a">Answer: </label>
+                          <input class="number"  type="number" name="for_answer" id="for_a">
+                        </div>
                       </div>
                     </div>
                     <input type="checkbox" id="add_res_condition">
                     <button type="button" id="add_condition_btn" onclick="addResourceCondition();" disabled>Add Another Condition</button>
-                    <input type="submit" name="submit_resource" id="submit_r" value="Add Resouce">
+                    <div class="submit_div">
+                      <input class="admin_submit" type="submit" name="submit_resource" id="submit_r" value="Add Resouce">
+                    </div>
                 </div>
                 <div id="r_modify" style="display:none">
+                  <input type="hidden" name="mod_r_id" id="mod_r_id">
                     <div id="resource_view">
                       <div id="resource_interface">
-                        <label for="r_tag_sel">Tag</label>
-                        <select id="r_tag_sel"></select><br>
-                        <label for="m_r_text">Text</label>
-                        <input type="text" name="resource_text" id="m_r_text"><br>
-                        <label for="m_r_link">Link</label>
-                        <input type="text" name="resource_link" id="m_r_link"><br>
-                        <label for="for_q">For Question </label>
-                        <input type="number" name="for_question" id="for_q">
-                        <label for="for_a">Answer: </label>
-                        <input type="number" name="for_answer" id="for_a">
+                        <div class="form_element_container">
+                          <label for="r_tag_sel_m">Tag</label>
+                          <select class="tag_select" id="r_tag_sel_m"></select><br>
+                        </div>
+                        <div class="form_element_container">
+                          <label for="m_r_text">Text</label>
+                          <input  type="text" name="resource_text" id="m_r_text"><br>
+                        </div>
+                        <div class="form_element_container">
+                          <label for="m_r_link">Link</label>
+                          <input  type="text" name="resource_link" id="m_r_link"><br>
+                        </div>
+                        <div class="form_element_container">
+                          <label for="for_q">For Question </label>
+                          <input class="number" type="number" name="for_question" id="for_q">
+                          <label for="for_a">Answer: </label>
+                          <input class="number" type="number" name="for_answer" id="for_a">
+                        </div>
                       </div>
                     </div>
                     <input type="checkbox" id="add_res_condition">
                     <button type="button" id="add_condition_btn" onclick="addResourceCondition();" disabled>Add Another Condition</button>
-                    <input type="submit" name="submit_resource" id="submit_r" value="Add Resouce">
+                    <div class="submit_div">
+                      <input class="admin_submit" type="submit" name="submit_resource" id="submit_r" value="Submit Changes">
+                    </div>
                 </div>
                 <div id="r_remove" style="display:none">
+                  <input type="hidden" name="rem_r_id" id="rem_r_id">
                     <div id="resource_view">
                       <div id="resource_interface">
-                        <label for="r_tag_sel_r">Tag</label>
-                        <select id="r_tag_sel_r "></select><br>
-                        <label for="r_t_r_text">Text</label>
-                        <input type="text" name="resource_text" id="r_t_r_text" readonly><br>
-                        <label for="r_t_r_link">Link</label>
-                        <input type="text" name="resource_link" id="r_t_r_link" readonly><br>
-                        <label for="for_q_r">For Question </label>
-                        <input type="number" name="for_question" id="for_q_r"  readonly>
-                        <label for="for_a_r">Answer: </label>
-                        <input type="number" name="for_answer" id="for_a_r" readonly>
+                        <div class="form_element_container">
+                          <label for="r_tag_sel_r">Tag</label>
+                          <select class="tag_select" id="r_tag_sel_r" disabled></select><br>
+                        </div>
+                        <div class="form_element_container">
+                          <label for="r_t_r_text">Text</label>
+                          <input  type="text" name="resource_text" id="r_t_r_text" readonly><br>
+                        </div>
+                        <div class="form_element_container">
+                          <label for="r_t_r_link">Link</label>
+                          <input  type="text" name="resource_link" id="r_t_r_link" readonly><br>
+                        </div>
+                        <div class="form_element_container">
+                          <label for="for_q_r">For Question </label>
+                          <input class="number"  type="number" name="for_question" id="for_q_r"  readonly>
+                          <label for="for_a_r">Answer: </label>
+                          <input class="number"  type="number" name="for_answer" id="for_a_r" readonly>
+                        </div>
                       </div>
                     </div>
-                    <input type="submit" name="submit_del_r" id="submit_del_r" value="Confirm Delete">
+                    <div class="submit_div">
+                      <input class="admin_submit" type="submit" name="submit_del_r" id="submit_del_r" value="Confirm Delete">
+                    </div>
                 </div>
               </form>
             </section>
@@ -272,6 +397,7 @@ if($result->num_rows > 0) {
         var currentView = "";
         var currentAction = "";
         var sel_id;
+        var sel_id2;
 
         var questions = <?php echo json_encode($questions); ?>;
         var answers = <?php echo json_encode($answers); ?>;
@@ -281,7 +407,7 @@ if($result->num_rows > 0) {
         var answerKeys = Object.keys(answers);
         var resourceKeys = Object.keys(resources);
 
-        fillResourceTags();
+        fillResourceTags("r_tag_sel");
 
         var conditionDiv = document.getElementById("cond_div");
         var checkbox = document.getElementById("cond_chk");
@@ -478,18 +604,23 @@ if($result->num_rows > 0) {
               case "questions":
                 switch(currentAction){
                   case "add":
+                    var form_id = document.getElementById("add_q_id");
                     break;
                   case "modify":
+                    var form_id = document.getElementById("mod_q_id");
                     var num = document.getElementById("q_m_num");
                     num.value = questions[sel_id][0];
                     var text = document.getElementById("q_m_text");
                     text.value = questions[sel_id][1];
+                    form_id.value = questions[sel_id][0];
                     break;
                   case "remove":
+                    var form_id = document.getElementById("rem_q_id");
                     var num = document.getElementById("q_r_num");
                     num.value = questions[sel_id][0];
                     var text = document.getElementById("q_r_text");
                     text.value = questions[sel_id][1];
+                    form_id.value = questions[sel_id][0];
                     break;
                   default:
                 }
@@ -497,18 +628,23 @@ if($result->num_rows > 0) {
               case "answers":
                 switch(currentAction){
                   case "add":
+                    var form_id = document.getElementById("add_a_id");
                     break;
                   case "modify":
+                    var form_id = document.getElementById("mod_a_id");
                     var num = document.getElementById("a_q_m_num");
                     num.value = answers[sel_id][1];
                     var text = document.getElementById("a_m_text");
                     text.value = answers[sel_id][2];
+                    form_id.value = answers[sel_id][0];
                     break;
                   case "remove":
+                    var form_id = document.getElementById("rem_a_id");
                     var num = document.getElementById("a_q_r_num");
                     num.value = answers[sel_id][1];
                     var text = document.getElementById("a_r_text");
                     text.value = answers[sel_id][2];
+                    form_id.value = answers[sel_id][0];
                     break;
                   default:
                 }
@@ -516,9 +652,13 @@ if($result->num_rows > 0) {
               case "resources":
                 switch(currentAction){
                   case "add":
+                    var form_id = document.getElementById("add_r_id");
                     break;
                   case "modify":
-                    var tagSelect = document.getElementById("r_tag_sel");
+                    var form_id = document.getElementById("mod_r_id");
+                    form_id.value = resources[sel_id][0];
+                    fillResourceTags("r_tag_sel_m");
+                    var tagSelect = document.getElementById("r_tag_sel_m");
                     switch(resources[sel_id][5]){
                       case "basic_chk":
                         tagSelect.value = "Basic Checklist";
@@ -559,6 +699,30 @@ if($result->num_rows > 0) {
                     }
                     break;
                   case "remove":
+                    var form_id = document.getElementById("rem_r_id");
+                    form_id.value = resources[sel_id][0];
+                    fillResourceTags("r_tag_sel_r");
+                    var tagSelect = document.getElementById("r_tag_sel_r");
+                    switch(resources[sel_id][5]){
+                      case "basic_chk":
+                        tagSelect.value = document.getElementById("basic_chk").innerHTML;
+                        break;
+                      case "site_selection":
+                        tagSelect.value = document.getElementById("site_selection").innerHTML;
+                        break;
+                      case "use_and_occ":
+                        tagSelect.value = document.getElementById("use_and_occ").innerHTML;
+                        break;
+                      case "other":
+                        tagSelect.value = document.getElementById("other").innerHTML;
+                        break;
+                      default:
+                    }
+                    console.log(tagSelect.value);
+                    var resourceText = document.getElementById("r_t_r_text");
+                    resourceText.value = resources[sel_id][2];
+                    var resourceLink = document.getElementById("r_t_r_link");
+                    resourceLink.value = resources[sel_id][3];
                     break;
                   default:
                 }
@@ -566,7 +730,6 @@ if($result->num_rows > 0) {
               default:
             }
             updateCol2();
-            updateCol3();
         }
 
         function updateCol2() {
@@ -594,7 +757,14 @@ if($result->num_rows > 0) {
               }
               break;
             case "resources":
-
+              for(var i=0; i<answers.length; i++){
+                if(resources[sel_id][1] == answers[i][0]){
+                  var option = document.createElement("option");
+                  option.id = i;
+                  option.innerHTML = answers[i][0] + ". " + answers[i][2];
+                  select2.appendChild(option);
+                }
+              }
               break;
             default:
 
@@ -604,35 +774,81 @@ if($result->num_rows > 0) {
         function updateCol3() {
           var select3 = document.getElementById("col_3");
           select3.innerHTML = '';
+          var select2 = document.getElementById("col_2");
+          var options = select2.options;
+          console.log(options);
+          sel_id2 = options[options.selectedIndex].id;
+          var select3 = document.getElementById("col_3");
+          select3.innerHTML = '';
           switch (currentView) {
             case "questions":
-
+              for(var i=0; i<resources.length; i++){
+                if(answers[sel_id][0] == resources[i][1]){
+                  var option = document.createElement("option");
+                  option.id = i;
+                  if(resources[i][2] != ""){
+                    option.innerHTML = resources[i][0] + ". " + resources[i][2];
+                  } else {
+                    option.innerHTML = resources[i][0] + ". [Resource text determined by condition. Click on this resource and select 'Modify' below to see these conditions.]" ;
+                  }
+                  select3.appendChild(option);
+                }
+              }
               break;
             case "answers":
-
+              for(var i=0; i<resources.length; i++){
+                if(answers[sel_id][0] == resources[i][1]){
+                  var option = document.createElement("option");
+                  option.id = i;
+                  if(resources[i][2] != ""){
+                    option.innerHTML = resources[i][0] + ". " + resources[i][2];
+                  } else {
+                    option.innerHTML = resources[i][0] + ". [Resource text determined by condition. Click on this resource and select 'Modify' below to see these conditions.]" ;
+                  }
+                  select3.appendChild(option);
+                }
+              }
               break;
             case "resources":
-
+              for(var i=0; i<questions.length; i++){
+                if(answers[sel_id2][1] == questions[i][0]){
+                  var option = document.createElement("option");
+                  option.id = i;
+                  option.innerHTML = questions[i][0] + ". " + questions[i][1];
+                  select3.appendChild(option);
+                }
+              }
               break;
             default:
 
           }
         }
 
-        function fillResourceTags(){
-          var resource_tags = document.getElementById("r_tag_sel");
+        function fillResourceTags(id){
+          console.log(id);
+          var resource_tags = document.getElementById(id);
+          console.log(resource_tags);
+          resource_tags.innerHTML = '';
           var option1 = document.createElement("option");
           option1.value = "Basic Checklist";
+          option1.innerHTML = "Basic Checklist";
+          option1.id = "basic_chk";
           var option2 = document.createElement("option");
           option2.value = "Site Selection";
+          option2.innerHTML = "Site Selection";
+          option2.id = "site_selection";
           var option3 = document.createElement("option");
           option3.value = "Use and Occupation";
+          option3.innerHTML = "Use and Occupation";
+          option3.id = "use_and_occ";
           var option4 = document.createElement("option");
           option4.value = "Other";
-          resource_tags.appendChild(option1);
-          resource_tags.appendChild(option2);
-          resource_tags.appendChild(option3);
-          resource_tags.appendChild(option4);
+          option4.innerHTML = "Other";
+          option4.id = "other";
+          resource_tags.add(option1);
+          resource_tags.add(option2);
+          resource_tags.add(option3);
+          resource_tags.add(option4);
         }
 
         function addResourceCondition(){
