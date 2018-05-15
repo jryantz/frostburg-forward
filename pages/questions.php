@@ -81,6 +81,7 @@ if($result->num_rows > 0) {
                     <li><a href="../index.html">Home</a></li>
                     <li><a href="start.html">Quick Start Tool</a></li>
                     <li><a href="AboutUs.html">About</a></li>
+                    <li><a href="#">Clients</a></li>
                 </ul>
             </nav>
         </header>
@@ -213,7 +214,6 @@ if($result->num_rows > 0) {
               }
           }
         </script>
-        <footer><div><p>Photo Credit: Gerald Snelson</p></div></footer>
     </body>
 </html>
 
