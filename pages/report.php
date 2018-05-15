@@ -296,25 +296,32 @@ if($con->connect_error) { die('Connection Failed: ' . $con->connect_error); }
             check.id = "sendToSBDC";
             check.name = "sendToSBDC";
 
+            var sendToSBDCDiv = document.createElement("div");
+            sendToSBDCDiv.className="submit_div";
+            sendToSBDCDiv.appendChild(label);
+            sendToSBDCDiv.appendChild(check);
+
             var reportInput = document.createElement("input");
             reportInput.type = "hidden";
             reportInput.name = "reportArr";
             reportInput.value = report;
 
+            var div = document.createElement("div");
+            div.className="submit_div";
             var submit = document.createElement("input");
             submit.type = "submit";
             submit.id = "submitContact";
             submit.value = "Send";
+            div.appendChild(submit);
 
             form.appendChild(input);
             form.appendChild(br);
             form.appendChild(br1);
             form.appendChild(br2);
-            form.appendChild(label);
-            form.appendChild(check);
+            form.appendChild(sendToSBDCDiv);
             form.appendChild(br);
             form.appendChild(reportInput);
-            form.appendChild(submit);
+            form.appendChild(div);
 
             document.getElementById("contact_div").appendChild(form);
             form.style.display = "none";
