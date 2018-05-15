@@ -1,0 +1,46 @@
+<html>
+<head>
+	<title>New Login Form Design</title>
+	<link rel="stylesheet" type="text/css" href="F:/Frostburg Forward/Css/NewLoginStyle.css">
+	<script src="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.js"></script>
+	<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.css" />
+</head>
+
+
+	<body>
+		<div class="login-box">
+			<img src="F:/Frostburg Forward/Pictures/avatar.png" class="avatar">
+				<h1>WMD Bizassist Admin</h1>
+					<form>
+						<p>Email</p>
+						<input type="email" id="Email" placeholder="Enter Email Address">
+						<p>Password</p>
+						<input type="password" id="Password" placeholder="Enter Password">
+						<input type="submit" id="Submit" value="Login">
+					</form>
+		</div>
+	
+	</body>
+
+
+  
+<script src="https://www.gstatic.com/firebasejs/5.0.1/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBWxn3avVxaZly4ZRfcJ47Ddv00nOL5L1s",
+    authDomain: "wmd-bizassist.firebaseapp.com",
+    databaseURL: "https://wmd-bizassist.firebaseio.com",
+    projectId: "wmd-bizassist",
+    storageBucket: "wmd-bizassist.appspot.com",
+    messagingSenderId: "25335187061"
+  };
+  firebase.initializeApp(config);
+  
+</script>
+
+<script src="AdminFB.js"></script>
+
+	
+	
+</html>
