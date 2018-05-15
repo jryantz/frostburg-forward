@@ -126,6 +126,7 @@ if($con->connect_error) { die('Connection Failed: ' . $con->connect_error); }
                     <li><a href="../index.html">Home</a></li>
                     <li><a href="start.html">Quick Start Tool</a></li>
                     <li><a href="AboutUs.html">About</a></li>
+                    <li><a href="#">Clients</a></li>
                 </ul>
             </nav>
         </header>
