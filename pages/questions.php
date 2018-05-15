@@ -11,7 +11,6 @@ $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
 // Check the connection to the database.
 if($con->connect_error) { die('Connection Failed: ' . $con->connect_error); }
-echo 'Connection Successful';
 
 $questions = array();
 

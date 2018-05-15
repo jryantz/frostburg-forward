@@ -89,7 +89,6 @@ if(isset($_POST['emailInput']))
 
 // Check the connection to the database.
 if($con->connect_error) { die('Connection Failed: ' . $con->connect_error); }
-echo 'Connection Successful';
 ?>
 
 <!doctype html>
@@ -183,7 +182,6 @@ echo 'Connection Successful';
         var resource_conditions;
         var resource_conditions = <?php echo json_encode($resource_conditions); ?>;
         var report = <?php echo json_encode($report) ?>;
-        console.log(report);
         if(report == null) {
           report = generateReport();
         }
@@ -221,19 +219,16 @@ echo 'Connection Successful';
               }
             }
           }
-          console.log(report);
           return report;
         }
 
         function setReportContent(){
           for(var i=0; i<report.length; i++){
             var entry = report[i];
-            console.log(entry);
             var li = document.createElement("li");
             var div = document.createElement("div");
             var p = document.createElement("p");
             p.innerHTML = entry[1];
-            console.log(p);
             var a;
             if(entry[2] != ""){
               a = document.createElement("a");
@@ -261,7 +256,6 @@ echo 'Connection Successful';
               document.getElementById("site_selection_data").appendChild(li);
               break;
               case 'use_and_occ':
-              console.log("hi");
               //document.getElementById("use_and_occ_data").appendChild(div);
               //document.getElementById("use_and_occ_data").appendChild(br);
               document.getElementById("use_and_occ_data").appendChild(li);
