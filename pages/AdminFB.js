@@ -1,18 +1,7 @@
 
-src="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.js">
-
 (function() {
 
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyBWxn3avVxaZly4ZRfcJ47Ddv00nOL5L1s",
-    authDomain: "wmd-bizassist.firebaseapp.com",
-    databaseURL: "https://wmd-bizassist.firebaseio.com",
-    projectId: "wmd-bizassist",
-    storageBucket: "wmd-bizassist.appspot.com",
-    messagingSenderId: "25335187061"
-  };
-  firebase.initializeApp(config);
+  
   
   // Gathering Elements
   var Email = document.getElementById('Email');
