@@ -1,13 +1,13 @@
 
 (function() {
 
-  
-  
+
+
   // Gathering Elements
   var Email = document.getElementById('Email');
-  var Password = document.getElementById('Passoword');
+  var Password = document.getElementById('Password');
   var btnSubmit = document.getElementById('Submit');
-  
+
   // Adding a click event
   btnSubmit.addEventListener('click', e => {
 	  // Get email and password fields
@@ -17,9 +17,9 @@
 	  // Sign In
 	  var promise = auth.signInWithEmailAndPassword(email,pass);
 	  promise.catch(e => console.log(e.message));
-	  
+
   });
-  
+
   // Realtime Listener
   firebase.auth().onAuthStateChanged(firebaseUser => {
 	  if(firebaseUser){
@@ -30,9 +30,9 @@
 		  btnLogout.classList.add('hide');
 	  }
   });
-  
-  
-  
-  
-  
+
+
+
+
+
 } );

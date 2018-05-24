@@ -1,34 +1,36 @@
 <html>
 <head>
 	<title>New Login Form Design</title>
-	<link rel="stylesheet" type="text/css" href="pages/css/NewLoginStyle.css">
-	
-<script>
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyBWxn3avVxaZly4ZRfcJ47Ddv00nOL5L1s",
-    authDomain: "wmd-bizassist.firebaseapp.com",
-    databaseURL: "https://wmd-bizassist.firebaseio.com",
-    projectId: "wmd-bizassist",
-    storageBucket: "wmd-bizassist.appspot.com",
-    messagingSenderId: "25335187061"
-  };
-  firebase.initializeApp(config);
-</script>
-
-	// Firebase App, for client required here 
+	<link rel="stylesheet" type="text/css" href="css/NewLoginStyle.css">
+	// Firebase App, for client required here
 	<script src="https://www.gstatic.com/firebasejs/5.0.3/firebase.js"></script>
-	// Firebase Auth, required for authentication use 
+	<script src="https://www.gstatic.com/firebasejs/5.0.3/firebase-app.js"></script>
+	// Firebase Auth, required for authentication use
 	<script src="https://www.gstatic.com/firebasejs/5.0.3/firebase-auth.js"></script>
-	// Firebase Authentication code 
-	<script src="F:/Frostburg Forward/AdminFB.js"></script>
+	// Firebase Authentication code
+	<script src="AdminFB.js"></script>
+
+	<script>
+	  // Initialize Firebase
+	  var config = {
+	    apiKey: "AIzaSyBWxn3avVxaZly4ZRfcJ47Ddv00nOL5L1s",
+	    authDomain: "wmd-bizassist.firebaseapp.com",
+	    databaseURL: "https://wmd-bizassist.firebaseio.com",
+	    projectId: "wmd-bizassist",
+	    storageBucket: "wmd-bizassist.appspot.com",
+	    messagingSenderId: "25335187061"
+	  };
+	  firebase.initializeApp(config);
+	</script>
+
+
 
 </head>
 
 
 	<body>
 		<div class="login-box">
-			<img src="pages/assets/avatar.png" class="avatar">
+			<img src="assets/avatar.png" class="avatar">
 				<h1>WMD Bizassist Admin</h1>
 					<form>
 						<p>Email</p>
@@ -38,14 +40,55 @@
 						<input type="submit" id="Submit" value="Login">
 					</form>
 		</div>
-	
+		<script>
+		authorizeLogin();
+
+		function authorizeLogin() {
+
+			// Gathering Elements
+			var Email = document.getElementById('Email');
+			var Password = document.getElementById('Password');
+			var btnSubmit = document.getElementById('Submit');
+
+			// Adding a click event
+			btnSubmit.addEventListener('click', e => {
+				// Get email and password fields
+				var email = Email.value;
+				var password = Password.value;
+				var auth = firebase.auth();
+
+				firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+				  // Handle Errors here.
+				  var errorCode = error.code;
+				  var errorMessage = error.message;
+				  // ...
+				});
+				// Sign In
+				var promise = auth.signInWithEmailAndPassword(email,password);
+				promise.catch(e => console.log(e.message));
+
+			});
+
+			// Realtime Listener
+			firebase.auth().onAuthStateChanged(firebaseUser => {
+				console.log(firebaseUser);
+				if(firebaseUser){
+					console.log(firebaseUser);
+					//btnLogout.classList.remove('hide');
+				} else {
+					console.log('not logged in');
+					//btnLogout.classList.add('hide');
+				}
+			});
+		}
+		</script>
 	</body>
 
 
-  
 
 
 
-	
-	
+
+
+
 </html>
