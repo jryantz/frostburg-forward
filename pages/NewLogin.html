@@ -1,7 +1,7 @@
 <html>
 <head>
 	<title>New Login Form Design</title>
-	<link rel="stylesheet" type="text/css" href="css/NewLoginStyle.css">
+	<link rel="stylesheet" type="text/css" href="pages/Css/NewLoginStyle.css">
 	// Firebase App, for client required here
 	<script src="https://www.gstatic.com/firebasejs/5.0.3/firebase.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/5.0.3/firebase-app.js"></script>
@@ -30,33 +30,35 @@
 
 	<body>
 		<div class="login-box">
-			<img src="assets/avatar.png" class="avatar">
-				<h1>WMD Bizassist Admin</h1>
+			<img src="https://cdn2.iconfinder.com/data/icons/website-icons/512/User_Avatar-256.png" class="avatar">
+				<h1>Login</h1>
 					<form>
 						<p>Email</p>
 						<input type="email" id="Email" placeholder="Enter Email Address">
 						<p>Password</p>
 						<input type="password" id="Password" placeholder="Enter Password">
-						<input type="submit" id="Submit" value="Login">
+						<button type="button" id="submit" value="Login"></button>
+						
+						
+						
 					</form>
 		</div>
 		<script>
 		authorizeLogin();
-
 		function authorizeLogin() {
-
 			// Gathering Elements
-			var Email = document.getElementById('Email');
-			var Password = document.getElementById('Password');
-			var btnSubmit = document.getElementById('Submit');
-
-			// Adding a click event
-			btnSubmit.addEventListener('click', e => {
+			const Email = document.getElementById('Email');
+			const Password = document.getElementById('Password');
+			const btnlogin = document.getElementById('submit');
+			
+			
+			
+			// Adding a click event to Login
+			btnlogin.addEventListener('click', e => {
 				// Get email and password fields
-				var email = Email.value;
-				var password = Password.value;
-				var auth = firebase.auth();
-
+				const email = Email.value;
+				const password = Password.value;
+				const auth = firebase.auth();
 				firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
 				  // Handle Errors here.
 				  var errorCode = error.code;
@@ -66,14 +68,16 @@
 				// Sign In
 				var promise = auth.signInWithEmailAndPassword(email,password);
 				promise.catch(e => console.log(e.message));
-
 			});
-
+			
+			
 			// Realtime Listener
 			firebase.auth().onAuthStateChanged(firebaseUser => {
 				console.log(firebaseUser);
 				if(firebaseUser){
 					console.log(firebaseUser);
+					console.log('You are logged in');
+					window.location = "www.google.com";
 					//btnLogout.classList.remove('hide');
 				} else {
 					console.log('not logged in');
