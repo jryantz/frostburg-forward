@@ -14,15 +14,17 @@ if($con->connect_error) { die('Connection Failed: ' . $con->connect_error); }
 
 if(isset($_POST['add_question_number']) && isset($_POST['add_question_text']) && isset($_POST['submit_add_q']) && isset($_POST['add_q_id'])){ //Query handler for adding questions
   $q_num = $_POST['add_question_number'];
+  var_dump($q_num);
   $q_text = $_POST['add_question_text'];
+  $next_q = $q_num+1;
   $sql = "INSERT INTO `questions` (`id`, `question`) VALUES (".$q_num.", '".$q_text."')";
   if(isset($_POST['condition_chk']) && $_POST['condition_chk'] == 'yes'){
     if(isset($_POST['to_q']) && isset($_POST['if_q']) && isset($_POST['a_is'])){
-      //$jsonCaseStr = "{\"cases\": [{""\"to\": ".$_POST['to_q'].", \"answer_condition\": ".$_POST['a_is'].", \"question_condition\": ".$_POST['if_q']."}, {\"to\": ".($q_num+1).", \"answer_condition\": \"DEFAULT\", \"question_condition\": \"DEFAULT\"}]}";
-      $jsonCaseStr = "{}";
+      $jsonCaseStr = "{ \"cases\": [{\"to\":".$_POST['to_q'].", \"answer_condition\":".$_POST['a_is'].", \"question_condition\":".$_POST['if_q']."}, {\"to\":".$next_q.", \"answer_condition\": \"DEFAULT\", \"question_condition\": \"DEFAULT\"}]}";
       $jsonCaseStr = utf8_encode($jsonCaseStr);
     }
-    $sql = "INSERT INTO `questions` VALUES (".$q_num.", '".$q_text."', '".$jsonCaseStr."')";
+    $sql = "INSERT INTO `questions` (`id`, `question`, `flow`) VALUES ($q_num, '".$q_text."', '".$jsonCaseStr."')";
+    echo $sql;
   }
   if ($con->query($sql) === TRUE) {
       alert("Entry Added Successfully");
@@ -61,8 +63,8 @@ if(isset($_POST['remove_question_number']) && isset($_POST['remove_question_text
   }
 }
 
-if(isset($_POST['add_question_number']) && isset($_POST['add_answer_text']) && isset($_POST['submit_add_a']) && isset($_POST['add_a_id'])){ //Query handler for adding answers
-  $q_num = $_POST['add_question_number'];
+if(isset($_POST['add_ans_question_number']) && isset($_POST['add_answer_text']) && isset($_POST['submit_add_a']) && isset($_POST['add_a_id'])){ //Query handler for adding answers
+  $q_num = $_POST['add_ans_question_number'];
   $a_text = $_POST['add_answer_text'];
   $sql = "INSERT INTO `answers` (`question_id`, `answer`) VALUES (".$q_num.", '".$a_text."')";
   if ($con->query($sql) === TRUE) {
@@ -95,13 +97,48 @@ if(isset($_POST['del_question_number']) && isset($_POST['del_answer_text']) && i
 }
 
 if(isset($_POST['submit_add_r'])){ //Query handler for adding resources
-  $num_conditions = $_POST['num_r_c'];
-  $jsonStart = "{ \"conditions\": [";
-  $jsonEnd = "]}";
-  $jsonObjFormat = "{\"question\": \"%s\", \"answer\": \"%s\", \"text\": \"%s\", \"link\": \"%s\"}"
+  $num_conditions = $_POST['num_resource_conditions'];
+  var_dump($num_conditions);
   $ans_id = $_POST['answer_id'];
-  $tag = $_POST['resource_tag'];
-  $sql = "INSERT INTO `resources` (`answer_id`, `tag`, `question_condition`, `answer_condition`, `link`, `text`, `condition`) VALUES ("".$ans_id.", "".$tag.")";
+  var_dump($ans_id);
+  $res_tag = $_POST['resource_tag'];
+  var_dump($res_tag);
+  $res_text = $_POST['a_resource_text'];
+  $res_link = $_POST['a_resource_link'];
+  $for_q = $_POST['a_for_question'];
+  if($for_q == ""){
+    $for_q = "NULL";
+  }
+  $for_a = $_POST['a_for_answer'];
+  if($for_a == ""){
+    $for_a = "NULL";
+  }
+  if($num_conditions > 0){
+    echo $yes;
+    $jsonStart = "{ \"conditions\": [";
+    $jsonObjFormat = "{\"question\": %s, \"answer\": %s, \"text\": \"%s\", \"link\": \"%s\"}";
+    $firstCondition = sprintf($jsonObjFormat, $for_q, $for_a, $res_text, $res_link);
+    $jsonCaseStr = $jsonStart.$firstCondition;
+    for($i=1; $i<=$num_conditions; $i++){
+      $jsonCaseStr .= ", ";
+      $c_question = $_POST['for_question'.$i];
+      $c_answer = $_POST['for_answer'.$i];
+      $c_text = $_POST['resource_text'.$i];
+      $c_link = $_POST['resource_link'.$i];
+      $conditionText = sprintf($jsonObjFormat, $c_question, $c_answer, $c_text, $c_link);
+      $jsonCaseStr .= $conditionText;
+    }
+    $jsonEnd = "]}";
+    $jsonCaseStr .= $jsonEnd;
+    $jsonCaseStr = utf8_encode($jsonCaseStr);
+    $sql = "INSERT INTO `resources` (`answer_id`, `tag`, `link`, `text`, `condition`) VALUES ($ans_id, '".$res_tag."', '', '', '".$jsonCaseStr."')";
+    var_dump($sql);
+  } else {
+    echo $no;
+    $sql = "INSERT INTO `resources` (`answer_id`, `tag`, `question_condition`, `answer_condition`, `link`, `text`) VALUES ($ans_id, '".$res_tag."', $for_q, $for_a, '".$res_link."', '".$res_text."')";
+    echo $sql;
+  }
+
   if ($con->query($sql) === TRUE) {
       alert("Entry Added Successfully");
   } else {
@@ -109,7 +146,27 @@ if(isset($_POST['submit_add_r'])){ //Query handler for adding resources
   }
 }
 
+if(isset($_POST['submit_mod_r'])){ //Query handler for modifying resources
+  $q_num = $_POST['mod_question_number'];
+  $a_text = $_POST['mod_answer_text'];
+  $r_id = $_POST['mod_r_id'];
+  $sql = "UPDATE `answers` SET `question_id`=".$q_num.", `answer`='".$a_text."' WHERE id=".$a_id."";
+  if ($con->query($sql) === TRUE) {
+      alert("Entry Modified Successfully");
+  } else {
+      alert("Error: " . $sql . "<br>" . $con->error);
+  }
+}
 
+if(isset($_POST['submit_del_r'])){ //Query handler for removing resources
+  $r_id = $_POST['rem_r_id'];
+  $sql = "DELETE FROM `resources` WHERE id=".$r_id."";
+  if ($con->query($sql) === TRUE) {
+      alert("Entry Deleted Successfully.");
+  } else {
+      alert("Error: " . $sql . "<br>" . $con->error);
+  }
+}
 
 $questions = array();
 $sql = "SELECT * FROM questions";
@@ -301,7 +358,7 @@ function alert($msg) {
                   <input type="hidden" name="add_a_id" id="add_a_id">
                   <div class="form_element_container">
                     <label for="a_q_num">For Question</label>
-                    <input class="number"  type="number" name="add_question_number" id="a_q_num"><br>
+                    <input class="number"  type="number" name="add_ans_question_number" id="a_q_num"><br>
                   </div>
                   <div class="form_element_container">
                     <label for="a_text">Answer Text</label>
@@ -352,17 +409,17 @@ function alert($msg) {
                         </div>
                         <div class="form_element_container">
                           <label for="a_r_text">Text</label>
-                          <input  type="text" name="resource_text" id="a_r_text"><br>
+                          <input  type="text" name="a_resource_text" id="a_r_text"><br>
                         </div>
                         <div class="form_element_container">
                           <label for="a_r_link">Link</label>
-                          <input  type="text" name="resource_link" id="a_r_link"><br>
+                          <input  type="text" name="a_resource_link" id="a_r_link"><br>
                         </div>
                         <div class="form_element_container">
                           <label for="a_for_q">If Question </label>
-                          <input class="number"  type="number" name="for_question" id="a_for_q">
+                          <input class="number"  type="number" name="a_for_question" id="a_for_q">
                           <label for="a_for_a">Answer Is: </label>
-                          <input class="number"  type="number" name="for_answer" id="a_for_a">
+                          <input class="number"  type="number" name="a_for_answer" id="a_for_a">
                         </div>
                       </div>
                     </div>
@@ -382,17 +439,17 @@ function alert($msg) {
                         </div>
                         <div class="form_element_container">
                           <label for="m_r_text">Text</label>
-                          <input  type="text" name="resource_text" id="m_r_text"><br>
+                          <input  type="text" name="m_resource_text" id="m_r_text"><br>
                         </div>
                         <div class="form_element_container">
                           <label for="m_r_link">Link</label>
-                          <input  type="text" name="resource_link" id="m_r_link"><br>
+                          <input  type="text" name="m_resource_link" id="m_r_link"><br>
                         </div>
                         <div class="form_element_container">
                           <label for="for_q">For Question </label>
-                          <input class="number" type="number" name="for_question" id="for_q">
+                          <input class="number" type="number" name="m_for_question" id="for_q_m">
                           <label for="for_a">Answer: </label>
-                          <input class="number" type="number" name="for_answer" id="for_a">
+                          <input class="number" type="number" name="m_for_answer" id="for_a_m">
                         </div>
                       </div>
                     </div>
@@ -412,17 +469,17 @@ function alert($msg) {
                         </div>
                         <div class="form_element_container">
                           <label for="r_t_r_text">Text</label>
-                          <input  type="text" name="resource_text" id="r_t_r_text" readonly><br>
+                          <input  type="text" name="r_resource_text" id="r_t_r_text" readonly><br>
                         </div>
                         <div class="form_element_container">
                           <label for="r_t_r_link">Link</label>
-                          <input  type="text" name="resource_link" id="r_t_r_link" readonly><br>
+                          <input  type="text" name="r_resource_link" id="r_t_r_link" readonly><br>
                         </div>
                         <div class="form_element_container">
                           <label for="for_q_r">For Question </label>
-                          <input class="number"  type="number" name="for_question" id="for_q_r"  readonly>
+                          <input class="number"  type="number" name="r_for_question" id="for_q_r"  readonly>
                           <label for="for_a_r">Answer: </label>
-                          <input class="number"  type="number" name="for_answer" id="for_a_r" readonly>
+                          <input class="number"  type="number" name="r_for_answer" id="for_a_r" readonly>
                         </div>
                       </div>
                     </div>
@@ -445,7 +502,8 @@ function alert($msg) {
         var sel_id;
         var sel_id2;
         var num_resource_conditions = 0;
-        document.getElementById("num_r_c").value = num_resource_conditions;
+        var res_condition_counter = document.getElementById("num_r_c");
+        res_condition_counter.value = num_resource_conditions;
 
         var questions = <?php echo json_encode($questions); ?>;
         var answers = <?php echo json_encode($answers); ?>;
@@ -501,6 +559,7 @@ function alert($msg) {
             case 'resources':
               currentView = "resources";
               fillResources("col_1");
+              fillAnswers("col_2");
               document.getElementById("col_1_header").innerText = "Resources";
               document.getElementById("col_2_header").innerText = "Answers";
               document.getElementById("col_3_header").innerText = "Question";
@@ -750,9 +809,9 @@ function alert($msg) {
                       var conditions = jsonObj.conditions;
                       for(var i=0; i<conditions.length; i++){
                         if(i == 0){
-                          var forQuestion = document.getElementById("for_q");
+                          var forQuestion = document.getElementById("for_q_m");
                           forQuestion.value = conditions[i].question;
-                          var forAnswer = document.getElementById("for_a");
+                          var forAnswer = document.getElementById("for_a_m");
                           forAnswer.value = conditions[i].answer;
                         } else {
                           var element = addResourceCondition();
@@ -883,6 +942,8 @@ function alert($msg) {
               }
               break;
             case "resources":
+              var resAns = document.getElementById("a_ans_id");
+              resAns.value = answers[sel_id2][0];
               for(var i=0; i<questions.length; i++){
                 if(answers[sel_id2][1] == questions[i][0]){
                   var option = document.createElement("option");
@@ -901,19 +962,19 @@ function alert($msg) {
           var resource_tags = document.getElementById(id);
           resource_tags.innerHTML = '';
           var option1 = document.createElement("option");
-          option1.value = "Basic Checklist";
+          option1.value = "basic_chk";
           option1.innerHTML = "Basic Checklist";
           option1.id = "basic_chk";
           var option2 = document.createElement("option");
-          option2.value = "Site Selection";
+          option2.value = "site_selection";
           option2.innerHTML = "Site Selection";
           option2.id = "site_selection";
           var option3 = document.createElement("option");
-          option3.value = "Use and Occupation";
+          option3.value = "use_and_occ";
           option3.innerHTML = "Use and Occupation";
           option3.id = "use_and_occ";
           var option4 = document.createElement("option");
-          option4.value = "Other";
+          option4.value = "other";
           option4.innerHTML = "Other";
           option4.id = "other";
           resource_tags.add(option1);
@@ -928,6 +989,8 @@ function alert($msg) {
           var tagSelectID;
           switch(currentAction){
             case "add":
+              num_resource_conditions++;
+              res_condition_counter.value = num_resource_conditions;
               var br1 = document.createElement("br");
               var br2 = document.createElement("br");
               var br3 = document.createElement("br");
@@ -943,14 +1006,14 @@ function alert($msg) {
               linkDiv.className = "form_element_container";
               forQADiv.className = "form_element_container";
 
-              var ansIDLabel = document.createElement("label");
+              //var ansIDLabel = document.createElement("label");
               var tagLabel = document.createElement("label");
               var textLabel = document.createElement("label");
               var linkLabel = document.createElement("label");
               var forQLabel = document.createElement("label");
               var forALabel = document.createElement("label");
 
-              ansIDLabel.innerHTML = "For Answer: ";
+              //ansIDLabel.innerHTML = "For Answer: ";
               tagLabel.innerHTML = "Tag";
               textLabel.innerHTML = "Text";
               linkLabel.innerHTML = "Link";
@@ -959,47 +1022,48 @@ function alert($msg) {
 
               var tagSelector = document.createElement("select");
 
-              var ansIDInput = document.createElement("input");
+              //var ansIDInput = document.createElement("input");
               var textInput = document.createElement("input");
               var linkInput = document.createElement("input");
               var forQInput = document.createElement("input");
               var forAInput = document.createElement("input");
 
-              ansIDInput.type = "number";
+              //ansIDInput.type = "number";
               textInput.type = "text";
               linkInput.type = "text";
               forQInput.type = "number";
               forAInput.type = "number";
 
-              ansIDInput.className = "number";
+              //ansIDInput.className = "number";
               tagSelector.className = "tag_select";
               forQInput.className = "number";
               forAInput.className = "number";
 
-              ansIDInput.id = 'a_ans_id'+num_resource_conditions;
+              //ansIDInput.id = 'a_ans_id'+num_resource_conditions;
               tagSelector.id = 'a_r_tag_sel'+num_resource_conditions;
               tagSelectID = tagSelector.id;
               textInput.id = 'a_r_text'+num_resource_conditions;
+              console.log(textInput.id);
               linkInput.id = 'a_r_link'+num_resource_conditions;
               forQInput.id = 'a_for_q'+num_resource_conditions;
               forAInput.id = 'a_for_a'+num_resource_conditions;
 
-              ansIDLabel.htmlFor = ansIDInput.id;
+              //ansIDLabel.htmlFor = ansIDInput.id;
               tagLabel.htmlFor = tagSelector.id;
               textLabel.htmlFor = textInput.id;
               linkLabel.htmlFor = linkInput.id;
               forQLabel.htmlFor = forQInput.id;
               forALabel.htmlFor = forAInput.id;
 
-              ansIDInput.name = "answer_id"+num_resource_conditions;
+              //ansIDInput.name = "answer_id"+num_resource_conditions;
               tagSelector.name = "resource_tag"+num_resource_conditions;
               textInput.name = "resource_text"+num_resource_conditions;
               linkInput.name = "resource_link"+num_resource_conditions;
               forQInput.name = "for_question"+num_resource_conditions;
               forAInput.name = "for_answer"+num_resource_conditions;
 
-              tagDiv.appendChild(ansIDLabel);
-              tagDiv.appendChild(ansIDInput);
+              //tagDiv.appendChild(ansIDLabel);
+              //tagDiv.appendChild(ansIDInput);
               tagDiv.appendChild(tagLabel);
               tagDiv.appendChild(tagSelector);
               tagDiv.appendChild(br1);
@@ -1032,7 +1096,7 @@ function alert($msg) {
               break;
             default:
           }
-          num_resource_conditions++;
+          console.log(num_resource_conditions);
           resourceView.appendChild(resourceInterface);
           fillResourceTags(tagSelectID);
           return resourceInterface;

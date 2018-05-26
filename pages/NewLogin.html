@@ -41,6 +41,19 @@
 					</form>
 		</div>
 		<script>
+		window.onload = function(){
+			// Realtime Listener
+			firebase.auth().onAuthStateChanged(firebaseUser => {
+				console.log(firebaseUser);
+				if(firebaseUser){
+					console.log(firebaseUser);
+					//btnLogout.classList.remove('hide');
+				} else {
+					console.log('not logged in');
+					//btnLogout.classList.add('hide');
+				}
+			});
+		}
 		authorizeLogin();
 
 		function authorizeLogin() {
@@ -67,18 +80,6 @@
 				var promise = auth.signInWithEmailAndPassword(email,password);
 				promise.catch(e => console.log(e.message));
 
-			});
-
-			// Realtime Listener
-			firebase.auth().onAuthStateChanged(firebaseUser => {
-				console.log(firebaseUser);
-				if(firebaseUser){
-					console.log(firebaseUser);
-					//btnLogout.classList.remove('hide');
-				} else {
-					console.log('not logged in');
-					//btnLogout.classList.add('hide');
-				}
 			});
 		}
 		</script>
