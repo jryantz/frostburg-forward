@@ -1,7 +1,7 @@
 <html>
 <head>
 	<title>New Login Form Design</title>
-	<link rel="stylesheet" type="text/css" href="pages/css/NewLoginStyle.css">
+	<link rel="stylesheet" type="text/css" href="css/NewLoginStyle.css">
 	// Firebase App, for client required here
 	<script src="https://www.gstatic.com/firebasejs/5.0.3/firebase.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/5.0.3/firebase-app.js"></script>
@@ -38,9 +38,9 @@
 						<p>Password</p>
 						<input type="password" id="Password" placeholder="Enter Password">
 						<button type="button" id="submit" value="Login"></button>
-						
-						
-						
+
+
+
 					</form>
 		</div>
 		<script>
@@ -50,22 +50,30 @@
 				console.log(firebaseUser);
 				if(firebaseUser){
 					console.log(firebaseUser);
+					console.log('You are logged in');
+					window.location = "admin.php";
 					//btnLogout.classList.remove('hide');
 				} else {
 					console.log('not logged in');
 					//btnLogout.classList.add('hide');
 				}
 			});
+
+			if(firebase.auth().currentUser){
+				firebase.auth.signOut();
+			} else {
+				authorizeLogin();
+			}
 		}
-		authorizeLogin();
+
 		function authorizeLogin() {
 			// Gathering Elements
 			const Email = document.getElementById('Email');
 			const Password = document.getElementById('Password');
 			const btnlogin = document.getElementById('submit');
-			
-			
-			
+
+
+
 			// Adding a click event to Login
 			btnlogin.addEventListener('click', e => {
 				// Get email and password fields
@@ -82,24 +90,8 @@
 				var promise = auth.signInWithEmailAndPassword(email,password);
 				promise.catch(e => console.log(e.message));
 			});
-<<<<<<< HEAD
-=======
-			
-			
-			// Realtime Listener
-			firebase.auth().onAuthStateChanged(firebaseUser => {
-				console.log(firebaseUser);
-				if(firebaseUser){
-					console.log(firebaseUser);
-					console.log('You are logged in');
-					window.location = "www.google.com";
-					//btnLogout.classList.remove('hide');
-				} else {
-					console.log('not logged in');
-					//btnLogout.classList.add('hide');
-				}
-			});
->>>>>>> e4175d20740828c329f51a3fa6eefdff31ec1242
+
+
 		}
 		</script>
 	</body>

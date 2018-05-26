@@ -150,7 +150,7 @@ if(isset($_POST['submit_mod_r'])){ //Query handler for modifying resources
   $q_num = $_POST['mod_question_number'];
   $a_text = $_POST['mod_answer_text'];
   $r_id = $_POST['mod_r_id'];
-  $sql = "UPDATE `answers` SET `question_id`=".$q_num.", `answer`='".$a_text."' WHERE id=".$a_id."";
+  $sql = "UPDATE `resources` SET `question_id`=".$q_num.", `answer`='".$a_text."' WHERE id=".$a_id."";
   if ($con->query($sql) === TRUE) {
       alert("Entry Modified Successfully");
   } else {
@@ -1087,8 +1087,102 @@ function alert($msg) {
               resourceInterface.appendChild(forQADiv);
               break;
             case "modify":
+              num_resource_conditions++;
+              res_condition_counter.value = num_resource_conditions;
+              var br1 = document.createElement("br");
+              var br2 = document.createElement("br");
+              var br3 = document.createElement("br");
               resourceView = document.getElementById("m_resource_view");
-              resourceInterface = document.getElementById("m_resource_interface");
+              resourceInterface = document.createElement("div");
+              var tagDiv = document.createElement("div");
+              var textDiv = document.createElement("div");
+              var linkDiv = document.createElement("div");
+              var forQADiv = document.createElement("div");
+
+              tagDiv.className = "form_element_container";
+              textDiv.className = "form_element_container";
+              linkDiv.className = "form_element_container";
+              forQADiv.className = "form_element_container";
+
+              //var ansIDLabel = document.createElement("label");
+              var tagLabel = document.createElement("label");
+              var textLabel = document.createElement("label");
+              var linkLabel = document.createElement("label");
+              var forQLabel = document.createElement("label");
+              var forALabel = document.createElement("label");
+
+              //ansIDLabel.innerHTML = "For Answer: ";
+              tagLabel.innerHTML = "Tag";
+              textLabel.innerHTML = "Text";
+              linkLabel.innerHTML = "Link";
+              forQLabel.innerHTML = "If Question ";
+              forALabel.innerHTML = "Answer Is: ";
+
+              var tagSelector = document.createElement("select");
+
+              //var ansIDInput = document.createElement("input");
+              var textInput = document.createElement("input");
+              var linkInput = document.createElement("input");
+              var forQInput = document.createElement("input");
+              var forAInput = document.createElement("input");
+
+              //ansIDInput.type = "number";
+              textInput.type = "text";
+              linkInput.type = "text";
+              forQInput.type = "number";
+              forAInput.type = "number";
+
+              //ansIDInput.className = "number";
+              tagSelector.className = "tag_select";
+              forQInput.className = "number";
+              forAInput.className = "number";
+
+              //ansIDInput.id = 'a_ans_id'+num_resource_conditions;
+              tagSelector.id = 'a_r_tag_sel'+num_resource_conditions;
+              tagSelectID = tagSelector.id;
+              textInput.id = 'a_r_text'+num_resource_conditions;
+              console.log(textInput.id);
+              linkInput.id = 'a_r_link'+num_resource_conditions;
+              forQInput.id = 'a_for_q'+num_resource_conditions;
+              forAInput.id = 'a_for_a'+num_resource_conditions;
+
+              //ansIDLabel.htmlFor = ansIDInput.id;
+              tagLabel.htmlFor = tagSelector.id;
+              textLabel.htmlFor = textInput.id;
+              linkLabel.htmlFor = linkInput.id;
+              forQLabel.htmlFor = forQInput.id;
+              forALabel.htmlFor = forAInput.id;
+
+              //ansIDInput.name = "answer_id"+num_resource_conditions;
+              tagSelector.name = "resource_tag"+num_resource_conditions;
+              textInput.name = "resource_text"+num_resource_conditions;
+              linkInput.name = "resource_link"+num_resource_conditions;
+              forQInput.name = "for_question"+num_resource_conditions;
+              forAInput.name = "for_answer"+num_resource_conditions;
+
+              //tagDiv.appendChild(ansIDLabel);
+              //tagDiv.appendChild(ansIDInput);
+              tagDiv.appendChild(tagLabel);
+              tagDiv.appendChild(tagSelector);
+              tagDiv.appendChild(br1);
+
+              textDiv.appendChild(textLabel);
+              textDiv.appendChild(textInput);
+              textDiv.appendChild(br2);
+
+              linkDiv.appendChild(linkLabel);
+              linkDiv.appendChild(linkInput);
+              linkDiv.appendChild(br3);
+
+              forQADiv.appendChild(forQLabel);
+              forQADiv.appendChild(forQInput);
+              forQADiv.appendChild(forALabel);
+              forQADiv.appendChild(forAInput);
+
+              resourceInterface.appendChild(tagDiv);
+              resourceInterface.appendChild(textDiv);
+              resourceInterface.appendChild(linkDiv);
+              resourceInterface.appendChild(forQADiv);
               break;
             case "remove":
               resourceView = document.getElementById("r_resource_view");
