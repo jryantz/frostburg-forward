@@ -1,7 +1,7 @@
 body{
 	margin: 0;
 	padding: 0;
-	background: url(pages/assets/cumberland-login-bg.jpg");
+	background: url("http://frenchandindianwarfoundation.org/wp-content/uploads/2015/12/22310232_1703584956381073_7647551197298710660_n.jpg");
 	background-size: cover;
 	background-position: center;
 	font-family: sans-serif;
@@ -58,7 +58,7 @@ h1{
 	font-size: 16px;
 }
 
-.login-box input[type="submit"]{
+.login-box button[id="btnLogin"]{
 	
 	border: none;
 	outline: none;
@@ -69,9 +69,34 @@ h1{
 	border-radius: 20px;
 }
 
-.login-box input[type="submit"]:hover {
+.login-box button[id="btnLogin"]:hover {
 	
 	cursor: pointer;
 	background: #39dc79;
 	color: #000;
 }
+
+.login-box button[id="submit"]{
+	
+	border: none;
+	outline: none;
+	height: 40px;
+	width: 250px;
+	background: #1c8adb;
+	color: #fff;
+	font-size: 18px;
+	border-radius: 20px;
+}
+
+.login-box button[id="submit"]:hover {
+	
+	cursor: pointer;
+	background: #39dc79;
+	color: #000;
+
+
+
+
+
+
+
