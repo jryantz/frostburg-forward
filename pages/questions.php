@@ -92,7 +92,7 @@ if($result->num_rows > 0) {
                     <div id="questions" class="c8">
                         <h1 id="question"></h1>
                         <div id="answerButtons">
-                          <!--<div class="button" onclick="updateQuestion()"><a class="full">Yes</a></div>
+                          <!--<div class="button" onclick="updateQuestion()"><a class="full" href="#">Yes</a></div>
                           <div class="button"><a href="start-q2b.html" class="full">No</a></div>-->
                         </div>
                     </div>
