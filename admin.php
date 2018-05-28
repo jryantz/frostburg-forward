@@ -10,220 +10,288 @@ $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 //$con = new mysqli($ser, $user, $password, $db);
 
 // Check the connection to the database.
-if($con->connect_error) { die('Connection Failed: ' . $con->connect_error); }
-
-if(isset($_POST['add_question_number']) && isset($_POST['add_question_text']) && isset($_POST['submit_add_q']) && isset($_POST['add_q_id'])){ //Query handler for adding questions
-  $q_num = $_POST['add_question_number'];
-  var_dump($q_num);
-  $q_text = $_POST['add_question_text'];
-  $next_q = $q_num+1;
-  $sql = "INSERT INTO `questions` (`id`, `question`) VALUES (".$q_num.", '".$q_text."')";
-  if(isset($_POST['condition_chk']) && $_POST['condition_chk'] == 'yes'){
-    if(isset($_POST['to_q']) && isset($_POST['if_q']) && isset($_POST['a_is'])){
-      $jsonCaseStr = "{ \"cases\": [{\"to\":".$_POST['to_q'].", \"answer_condition\":".$_POST['a_is'].", \"question_condition\":".$_POST['if_q']."}, {\"to\":".$next_q.", \"answer_condition\": \"DEFAULT\", \"question_condition\": \"DEFAULT\"}]}";
-      $jsonCaseStr = utf8_encode($jsonCaseStr);
-    }
-    $sql = "INSERT INTO `questions` (`id`, `question`, `flow`) VALUES ($q_num, '".$q_text."', '".$jsonCaseStr."')";
-    echo $sql;
-  }
-  if ($con->query($sql) === TRUE) {
-      alert("Entry Added Successfully");
-  } else {
-      alert("Error: " . $sql . "<br>" . $con->error);
-  }
+if ($con->connect_error) {
+    die('Connection Failed: ' . $con->connect_error);
 }
 
-if(isset($_POST['modify_question_number']) && isset($_POST['modify_question_text']) && isset($_POST['submit_modify_question']) && isset($_POST['mod_q_id'])){ //Query handler for modifying questions
-  $q_num = $_POST['modify_question_number'];
-  $q_text = $_POST['modify_question_text'];
-  $q_id = $_POST['mod_q_id'];
-  $sql = "UPDATE `questions` SET `question`='".$q_text."' WHERE id=".$q_id."";
-  if(isset($_POST['condition_chk']) && $_POST['condition_chk'] == 'yes'){
-    if(isset($_POST['to_q']) && isset($_POST['if_q']) && isset($_POST['a_is'])){
-      //$jsonCaseStr = "{"cases"": [{""to"": ".$_POST['to_q'].", ""answer_condition"": ".$_POST['a_is'].", ""question_condition"": ".$_POST['if_q']."}, {""to"": ".($q_num+1).", ""answer_condition"": ""DEFAULT"", ""question_condition"": ""DEFAULT""}]}";
-      $jsonCaseStr = "{}";
+if (isset($_POST['add_question_number']) && isset($_POST['add_question_text']) && isset($_POST['submit_add_q']) && isset($_POST['add_q_id'])) { //Query handler for adding questions
+    $q_num = $_POST['add_question_number'];
+    var_dump($q_num);
+    $q_text = $_POST['add_question_text'];
+    $next_q = $q_num+1;
+    $sql = "INSERT INTO `questions` (`id`, `question`) VALUES (".$q_num.", '".$q_text."')";
+    if (isset($_POST['condition_chk']) && $_POST['condition_chk'] == 'yes') {
+        if (isset($_POST['to_q']) && isset($_POST['if_q']) && isset($_POST['a_is'])) {
+            $jsonCaseStr = "{ \"cases\": [{\"to\":".$_POST['to_q'].", \"answer_condition\":".$_POST['a_is'].", \"question_condition\":".$_POST['if_q']."}, {\"to\":".$next_q.", \"answer_condition\": \"DEFAULT\", \"question_condition\": \"DEFAULT\"}]}";
+            $jsonCaseStr = utf8_encode($jsonCaseStr);
+        }
+        $sql = "INSERT INTO `questions` (`id`, `question`, `flow`) VALUES ($q_num, '".$q_text."', '".$jsonCaseStr."')";
+        echo $sql;
+    }
+    if ($con->query($sql) === true) {
+        alert("Entry Added Successfully");
+    } else {
+        alert("Error: " . $sql . "<br>" . $con->error);
+    }
+}
+
+if (isset($_POST['modify_question_number']) && isset($_POST['modify_question_text']) && isset($_POST['submit_modify_question']) && isset($_POST['mod_q_id'])) { //Query handler for modifying questions
+    $q_num = $_POST['modify_question_number'];
+    $q_text = $_POST['modify_question_text'];
+    $q_id = $_POST['mod_q_id'];
+    $sql = "UPDATE `questions` SET `question`='".$q_text."' WHERE id=".$q_id."";
+    if (isset($_POST['condition_chk']) && $_POST['condition_chk'] == 'yes') {
+        if (isset($_POST['to_q']) && isset($_POST['if_q']) && isset($_POST['a_is'])) {
+            //$jsonCaseStr = "{"cases"": [{""to"": ".$_POST['to_q'].", ""answer_condition"": ".$_POST['a_is'].", ""question_condition"": ".$_POST['if_q']."}, {""to"": ".($q_num+1).", ""answer_condition"": ""DEFAULT"", ""question_condition"": ""DEFAULT""}]}";
+            $jsonCaseStr = "{}";
+            $jsonCaseStr = utf8_encode($jsonCaseStr);
+        }
+        $sql = "UPDATE `questions` SET `question`=".$q_text.", `flow`=".$jsonCaseStr." WHERE id=".$q_id."";
+    }
+    if ($con->query($sql) === true) {
+        alert("Entry Modified Successfully");
+    } else {
+        alert("Error: " . $sql . "<br>" . $con->error);
+    }
+}
+
+if (isset($_POST['remove_question_number']) && isset($_POST['remove_question_text']) && isset($_POST['submit_delete_question']) && isset($_POST['rem_q_id'])) { //Query handler for removing questions
+    $q_id = $_POST['rem_q_id'];
+    $sql = "DELETE FROM `questions` WHERE id=".$q_id."";
+    if ($con->query($sql) === true) {
+        alert("Entry Deleted Successfully.");
+    } else {
+        alert("Error: " . $sql . "<br>" . $con->error);
+    }
+}
+
+if (isset($_POST['add_ans_question_number']) && isset($_POST['add_answer_text']) && isset($_POST['submit_add_a']) && isset($_POST['add_a_id'])) { //Query handler for adding answers
+    $q_num = $_POST['add_ans_question_number'];
+    $a_text = $_POST['add_answer_text'];
+    $sql = "INSERT INTO `answers` (`question_id`, `answer`) VALUES (".$q_num.", '".$a_text."')";
+    if ($con->query($sql) === true) {
+        alert("Entry Added Successfully");
+    } else {
+        alert("Error: " . $sql . "<br>" . $con->error);
+    }
+}
+
+if (isset($_POST['mod_question_number']) && isset($_POST['mod_answer_text']) && isset($_POST['submit_mod_a']) && isset($_POST['mod_a_id'])) { //Query handler for modifying answers
+    $q_num = $_POST['mod_question_number'];
+    $a_text = $_POST['mod_answer_text'];
+    $a_id = $_POST['mod_a_id'];
+    $sql = "UPDATE `answers` SET `question_id`=".$q_num.", `answer`='".$a_text."' WHERE id=".$a_id."";
+    if ($con->query($sql) === true) {
+        alert("Entry Modified Successfully");
+    } else {
+        alert("Error: " . $sql . "<br>" . $con->error);
+    }
+}
+
+if (isset($_POST['del_question_number']) && isset($_POST['del_answer_text']) && isset($_POST['submit_del_a']) && isset($_POST['rem_a_id'])) { //Query handler for removing answers
+    $a_id = $_POST['rem_a_id'];
+    $sql = "DELETE FROM `answers` WHERE id=".$a_id."";
+    if ($con->query($sql) === true) {
+        alert("Entry Deleted Successfully.");
+    } else {
+        alert("Error: " . $sql . "<br>" . $con->error);
+    }
+}
+
+if (isset($_POST['submit_add_r'])) { //Query handler for adding resources
+    $num_conditions = $_POST['num_resource_conditions'];
+    var_dump($num_conditions);
+    $ans_id = $_POST['answer_id'];
+    var_dump($ans_id);
+    $res_tag = $_POST['resource_tag'];
+    var_dump($res_tag);
+    $res_text = $_POST['a_resource_text'];
+    $res_link = $_POST['a_resource_link'];
+    $for_q = $_POST['a_for_question'];
+    if ($for_q == "") {
+        $for_q = "NULL";
+    }
+    $for_a = $_POST['a_for_answer'];
+    if ($for_a == "") {
+        $for_a = "NULL";
+    }
+    if ($num_conditions > 0) {
+        echo $yes;
+        $jsonStart = "{ \"conditions\": [";
+        $jsonObjFormat = "{\"question\": %s, \"answer\": %s, \"text\": \"%s\", \"link\": \"%s\"}";
+        $firstCondition = sprintf($jsonObjFormat, $for_q, $for_a, $res_text, $res_link);
+        $jsonCaseStr = $jsonStart.$firstCondition;
+        for ($i=1; $i<=$num_conditions; $i++) {
+            $jsonCaseStr .= ", ";
+            $c_question = $_POST['for_question'.$i];
+            $c_answer = $_POST['for_answer'.$i];
+            $c_text = $_POST['resource_text'.$i];
+            $c_link = $_POST['resource_link'.$i];
+            $conditionText = sprintf($jsonObjFormat, $c_question, $c_answer, $c_text, $c_link);
+            $jsonCaseStr .= $conditionText;
+        }
+        $jsonEnd = "]}";
+        $jsonCaseStr .= $jsonEnd;
         $jsonCaseStr = utf8_encode($jsonCaseStr);
+        $sql = "INSERT INTO `resources` (`answer_id`, `tag`, `link`, `text`, `condition`) VALUES ($ans_id, '".$res_tag."', '', '', '".$jsonCaseStr."')";
+        var_dump($sql);
+    } else {
+        echo $no;
+        $sql = "INSERT INTO `resources` (`answer_id`, `tag`, `question_condition`, `answer_condition`, `link`, `text`) VALUES ($ans_id, '".$res_tag."', $for_q, $for_a, '".$res_link."', '".$res_text."')";
+        echo $sql;
     }
-    $sql = "UPDATE `questions` SET `question`=".$q_text.", `flow`=".$jsonCaseStr." WHERE id=".$q_id."";
-  }
-  if ($con->query($sql) === TRUE) {
-      alert("Entry Modified Successfully");
-  } else {
-      alert("Error: " . $sql . "<br>" . $con->error);
-  }
-}
 
-if(isset($_POST['remove_question_number']) && isset($_POST['remove_question_text']) && isset($_POST['submit_delete_question']) && isset($_POST['rem_q_id'])){ //Query handler for removing questions
-  $q_id = $_POST['rem_q_id'];
-  $sql = "DELETE FROM `questions` WHERE id=".$q_id."";
-  if ($con->query($sql) === TRUE) {
-      alert("Entry Deleted Successfully.");
-  } else {
-      alert("Error: " . $sql . "<br>" . $con->error);
-  }
-}
-
-if(isset($_POST['add_ans_question_number']) && isset($_POST['add_answer_text']) && isset($_POST['submit_add_a']) && isset($_POST['add_a_id'])){ //Query handler for adding answers
-  $q_num = $_POST['add_ans_question_number'];
-  $a_text = $_POST['add_answer_text'];
-  $sql = "INSERT INTO `answers` (`question_id`, `answer`) VALUES (".$q_num.", '".$a_text."')";
-  if ($con->query($sql) === TRUE) {
-      alert("Entry Added Successfully");
-  } else {
-      alert("Error: " . $sql . "<br>" . $con->error);
-  }
-}
-
-if(isset($_POST['mod_question_number']) && isset($_POST['mod_answer_text']) && isset($_POST['submit_mod_a']) && isset($_POST['mod_a_id'])){ //Query handler for modifying answers
-  $q_num = $_POST['mod_question_number'];
-  $a_text = $_POST['mod_answer_text'];
-  $a_id = $_POST['mod_a_id'];
-  $sql = "UPDATE `answers` SET `question_id`=".$q_num.", `answer`='".$a_text."' WHERE id=".$a_id."";
-  if ($con->query($sql) === TRUE) {
-      alert("Entry Modified Successfully");
-  } else {
-      alert("Error: " . $sql . "<br>" . $con->error);
-  }
-}
-
-if(isset($_POST['del_question_number']) && isset($_POST['del_answer_text']) && isset($_POST['submit_del_a']) && isset($_POST['rem_a_id'])){ //Query handler for removing answers
-  $a_id = $_POST['rem_a_id'];
-  $sql = "DELETE FROM `answers` WHERE id=".$a_id."";
-  if ($con->query($sql) === TRUE) {
-      alert("Entry Deleted Successfully.");
-  } else {
-      alert("Error: " . $sql . "<br>" . $con->error);
-  }
-}
-
-if(isset($_POST['submit_add_r'])){ //Query handler for adding resources
-  $num_conditions = $_POST['num_resource_conditions'];
-  var_dump($num_conditions);
-  $ans_id = $_POST['answer_id'];
-  var_dump($ans_id);
-  $res_tag = $_POST['resource_tag'];
-  var_dump($res_tag);
-  $res_text = $_POST['a_resource_text'];
-  $res_link = $_POST['a_resource_link'];
-  $for_q = $_POST['a_for_question'];
-  if($for_q == ""){
-    $for_q = "NULL";
-  }
-  $for_a = $_POST['a_for_answer'];
-  if($for_a == ""){
-    $for_a = "NULL";
-  }
-  if($num_conditions > 0){
-    echo $yes;
-    $jsonStart = "{ \"conditions\": [";
-    $jsonObjFormat = "{\"question\": %s, \"answer\": %s, \"text\": \"%s\", \"link\": \"%s\"}";
-    $firstCondition = sprintf($jsonObjFormat, $for_q, $for_a, $res_text, $res_link);
-    $jsonCaseStr = $jsonStart.$firstCondition;
-    for($i=1; $i<=$num_conditions; $i++){
-      $jsonCaseStr .= ", ";
-      $c_question = $_POST['for_question'.$i];
-      $c_answer = $_POST['for_answer'.$i];
-      $c_text = $_POST['resource_text'.$i];
-      $c_link = $_POST['resource_link'.$i];
-      $conditionText = sprintf($jsonObjFormat, $c_question, $c_answer, $c_text, $c_link);
-      $jsonCaseStr .= $conditionText;
+    if ($con->query($sql) === true) {
+        alert("Entry Added Successfully");
+    } else {
+        alert("Error: " . $sql . "<br>" . $con->error);
     }
-    $jsonEnd = "]}";
-    $jsonCaseStr .= $jsonEnd;
-    $jsonCaseStr = utf8_encode($jsonCaseStr);
-    $sql = "INSERT INTO `resources` (`answer_id`, `tag`, `link`, `text`, `condition`) VALUES ($ans_id, '".$res_tag."', '', '', '".$jsonCaseStr."')";
-    var_dump($sql);
-  } else {
-    echo $no;
-    $sql = "INSERT INTO `resources` (`answer_id`, `tag`, `question_condition`, `answer_condition`, `link`, `text`) VALUES ($ans_id, '".$res_tag."', $for_q, $for_a, '".$res_link."', '".$res_text."')";
-    echo $sql;
-  }
-
-  if ($con->query($sql) === TRUE) {
-      alert("Entry Added Successfully");
-  } else {
-      alert("Error: " . $sql . "<br>" . $con->error);
-  }
 }
 
-if(isset($_POST['submit_mod_r'])){ //Query handler for modifying resources
-  $q_num = $_POST['mod_question_number'];
-  $a_text = $_POST['mod_answer_text'];
-  $r_id = $_POST['mod_r_id'];
-  $sql = "UPDATE `resources` SET `question_id`=".$q_num.", `answer`='".$a_text."' WHERE id=".$a_id."";
-  if ($con->query($sql) === TRUE) {
-      alert("Entry Modified Successfully");
-  } else {
-      alert("Error: " . $sql . "<br>" . $con->error);
-  }
+if (isset($_POST['submit_mod_r'])) { //Query handler for modifying resources
+    $r_id = $_POST['mod_r_id'];
+    $num_conditions = $_POST['m_num_resource_conditions'];
+    var_dump($num_conditions);
+    $ans_id = $_POST['m_answer_id'];
+    var_dump($ans_id);
+    $res_tag = $_POST['m_resource_tag'];
+    var_dump($res_tag);
+    $res_text = $_POST['m_resource_text'];
+    $res_link = $_POST['m_resource_link'];
+    $for_q = $_POST['m_for_question'];
+    if ($for_q == "") {
+        $for_q = "NULL";
+    }
+    $for_a = $_POST['m_for_answer'];
+    if ($for_a == "") {
+        $for_a = "NULL";
+    }
+    if ($num_conditions > 0) {
+        $jsonStart = "{ \"conditions\": [";
+        $jsonObjFormat = "{\"question\": %s, \"answer\": %s, \"text\": \"%s\", \"link\": \"%s\"}";
+        $firstCondition = sprintf($jsonObjFormat, $for_q, $for_a, $res_text, $res_link);
+        $jsonCaseStr = $jsonStart.$firstCondition;
+        for ($i=1; $i<=$num_conditions; $i++) {
+            $jsonCaseStr .= ", ";
+            $c_question = $_POST['for_question'.$i];
+            $c_answer = $_POST['for_answer'.$i];
+            $c_text = $_POST['resource_text'.$i];
+            $c_link = $_POST['resource_link'.$i];
+            $conditionText = sprintf($jsonObjFormat, $c_question, $c_answer, $c_text, $c_link);
+            $jsonCaseStr .= $conditionText;
+        }
+        $jsonEnd = "]}";
+        $jsonCaseStr .= $jsonEnd;
+        $jsonCaseStr = utf8_encode($jsonCaseStr);
+        var_dump($jsonCaseStr);
+        $sql = "UPDATE `resources` SET `answer_id`=".$ans_id.", `condition`='".$jsonCaseStr."' WHERE id=".$r_id."";
+        var_dump($sql);
+    } else {
+        $sql = "UPDATE `resources` SET `answer_id`=".$ans_id.", `tag`='".$res_tag."', `link`='".$res_link."', `text`='".$res_text."' WHERE id=".$r_id."";
+        echo $sql;
+    }
+
+    if ($con->query($sql) === true) {
+        alert("Entry Modified Successfully");
+    } else {
+        alert("Error: " . $sql . "<br>" . $con->error);
+    }
 }
 
-if(isset($_POST['submit_del_r'])){ //Query handler for removing resources
-  $r_id = $_POST['rem_r_id'];
-  $sql = "DELETE FROM `resources` WHERE id=".$r_id."";
-  if ($con->query($sql) === TRUE) {
-      alert("Entry Deleted Successfully.");
-  } else {
-      alert("Error: " . $sql . "<br>" . $con->error);
-  }
+if (isset($_POST['submit_del_r'])) { //Query handler for removing resources
+    $r_id = $_POST['rem_r_id'];
+    $sql = "DELETE FROM `resources` WHERE id=".$r_id."";
+    if ($con->query($sql) === true) {
+        alert("Entry Deleted Successfully.");
+    } else {
+        alert("Error: " . $sql . "<br>" . $con->error);
+    }
 }
 
 $questions = array();
 $sql = "SELECT * FROM questions";
 $result = $con->query($sql);
-if($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
         $questions[] = array($row['id'], $row['question'], $row['flow']);
     }
-} else { echo 'No Results'; }
+} else {
+    echo 'No Results';
+}
 
 $answers = array();
 $sql = "SELECT * FROM answers";
 $result = $con->query($sql);
-if($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
         $answers[] = array($row['id'], $row['question_id'], $row['answer']);
     }
-} else { echo 'No Results'; }
+} else {
+    echo 'No Results';
+}
 
 $resources = array();
 $sql = "SELECT * FROM resources";
 $result = $con->query($sql);
-if($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
         $resources[] = array($row['id'], $row['answer_id'], utf8_encode($row['text']), utf8_encode($row['link']), utf8_encode($row['condition']), $row['tag']);
     }
-} else { echo 'No Results'; }
+} else {
+    echo 'No Results';
+}
 
-function alert($msg) {
+function alert($msg)
+{
     echo "<script type='text/javascript'>alert('$msg');</script>";
 }
 ?>
 <html>
-  <head>
-    <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+<head>
+    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-auth.js"></script>
     <script>
-    // Initialize Firebase
-    var config = {
-      apiKey: "AIzaSyBWxn3avVxaZly4ZRfcJ47Ddv00nOL5L1s",
-      authDomain: "wmd-bizassist.firebaseapp.com",
-      databaseURL: "https://wmd-bizassist.firebaseio.com",
-      projectId: "wmd-bizassist",
-      storageBucket: "",
-      messagingSenderId: "25335187061"
-    };
-    firebase.initializeApp(config);
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyBWxn3avVxaZly4ZRfcJ47Ddv00nOL5L1s",
+            authDomain: "wmd-bizassist.firebaseapp.com",
+            databaseURL: "https://wmd-bizassist.firebaseio.com",
+            projectId: "wmd-bizassist",
+            storageBucket: "wmd-bizassist.appspot.com",
+            messagingSenderId: "25335187061"
+        };
+        firebase.initializeApp(config);
     </script>
-    <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase-auth.js"></script>
+
+    <script>
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                // User is signed in.
+            } else {
+                // No user is signed in.
+                window.location = 'login';
+            }
+        });
+
+        function logout() {
+            firebase.auth().signOut().then(function() {
+                // Sign-out successful.
+                window.location = 'login';
+            }).catch(function(error) {
+                // An error happened.
+            });
+        }
+    </script>
+
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-118657595-1"></script>
     <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
 
-    gtag('config', 'UA-118657595-1');
+        gtag('config', 'UA-118657595-1');
     </script>
 
     <title>WMD BizAssist Admin</title>
@@ -236,16 +304,13 @@ function alert($msg) {
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700" rel="stylesheet">
     <link href="css/app.css" type="text/css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  </head>
-  <body>
+</head>
+<body>
     <header>
         <nav class="grid-fixed">
-            <a href="../index.html" class="title">Western Maryland BizAssist Admin</a>
+            <a href="admin" class="title">Western Maryland BizAssist Admin</a>
             <ul>
-                <li><a href="../index.html">Home</a></li>
-                <li><a href="start.html">Business</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="#" onclick="logout();">Logout</a></li>
             </ul>
         </nav>
     </header>
@@ -432,10 +497,13 @@ function alert($msg) {
                 <div id="r_modify" style="display:none">
                   <input type="hidden" name="mod_r_id" id="mod_r_id">
                     <div id="m_resource_view">
+                      <input type="hidden" name="m_num_resource_conditions" id="m_num_r_c">
                       <div id="m_resource_interface">
                         <div class="form_element_container">
+                          <label for="m_ans_id">For Answer: </label>
+                          <input class="number" type="number" name="m_answer_id" id="m_ans_id">
                           <label for="r_tag_sel_m">Tag</label>
-                          <select class="tag_select" id="r_tag_sel_m"></select><br>
+                          <select name="m_resource_tag" class="tag_select" id="r_tag_sel_m"></select><br>
                         </div>
                         <div class="form_element_container">
                           <label for="m_r_text">Text</label>
@@ -460,12 +528,15 @@ function alert($msg) {
                     </div>
                 </div>
                 <div id="r_remove" style="display:none">
-                  <input type="hidden" name="rem_r_id" id="rem_r_id">
+                  <input type="hidden" name="rem_r_id" id="del_r_id">
                     <div id="r_resource_view">
+                      <input type="hidden" name="r_num_resource_conditions" id="r_num_r_c">
                       <div id="r_resource_interface">
                         <div class="form_element_container">
+                          <label for="r_ans_id">For Answer: </label>
+                          <input class="number" type="number" name="r_answer_id" id="r_ans_id">
                           <label for="r_tag_sel_r">Tag</label>
-                          <select class="tag_select" id="r_tag_sel_r" disabled></select><br>
+                          <select name="r_resource_tag" class="tag_select" id="r_tag_sel_r" disabled></select><br>
                         </div>
                         <div class="form_element_container">
                           <label for="r_t_r_text">Text</label>
@@ -503,7 +574,11 @@ function alert($msg) {
         var sel_id2;
         var num_resource_conditions = 0;
         var res_condition_counter = document.getElementById("num_r_c");
+        var m_res_condition_counter = document.getElementById("m_num_r_c");
+        var r_res_condition_counter = document.getElementById("r_num_r_c");
         res_condition_counter.value = num_resource_conditions;
+        m_res_condition_counter.value = num_resource_conditions;
+        r_res_condition_counter.value = num_resource_conditions;
 
         var questions = <?php echo json_encode($questions); ?>;
         var answers = <?php echo json_encode($answers); ?>;
@@ -786,6 +861,8 @@ function alert($msg) {
                     }
                     var form_id = document.getElementById("mod_r_id");
                     form_id.value = resources[sel_id][0];
+                    var ansID = document.getElementById("m_ans_id");
+                    ansID.value = resources[sel_id][1];
                     fillResourceTags("r_tag_sel_m");
                     var tagSelect = document.getElementById("r_tag_sel_m");
                     switch(resources[sel_id][5]){
@@ -808,21 +885,61 @@ function alert($msg) {
                       var jsonObj = JSON.parse(conditionEntry);
                       var conditions = jsonObj.conditions;
                       for(var i=0; i<conditions.length; i++){
+                        console.log(conditions);
                         if(i == 0){
+                          var resourceTag = document.getElementById("r_tag_sel_m");
+                          fillResourceTags("r_tag_sel_m");
+                          for(var j=0; j<resourceTag.options.length; j++){
+                            if(resourceTag.options[j].id == resources[sel_id][5]){
+                              resourceTag.selectedIndex = j;
+                              break;
+                            }
+                          }
+                          var text = document.getElementById("m_r_text");
+                          text.value = conditions[i].text;
+                          var link = document.getElementById("m_r_link");
+                          link.value = conditions[i].link;
+
                           var forQuestion = document.getElementById("for_q_m");
                           forQuestion.value = conditions[i].question;
                           var forAnswer = document.getElementById("for_a_m");
                           forAnswer.value = conditions[i].answer;
                         } else {
                           var element = addResourceCondition();
-                          console.log(element.childNodes);
-                          var forQuestion = element.childNodes[8];
+                          var tagDiv = element.childNodes[0];
+                          var textDiv = element.childNodes[1];
+                          var linkDiv = element.childNodes[2];
+                          var forQADiv = element.childNodes[3];
+
+                          var resourceTag = tagDiv.childNodes[1];
+                          fillResourceTags(resourceTag.id);
+                          for(var j=0; j<resourceTag.options.length; j++){
+                            if(resourceTag.options[j].id == resources[sel_id][5]){
+                              resourceTag.selectedIndex = j;
+                              break;
+                            }
+                          }
+
+                          var text = textDiv.childNodes[1];
+                          text.value = conditions[i].text;
+                          var link = linkDiv.childNodes[1];
+                          link.value = conditions[i].link;
+
+                          var forQuestion = forQADiv.childNodes[1];
                           forQuestion.value = conditions[i].question;
-                          var forAnswer = element.childNodes[10];
+                          var forAnswer = forQADiv.childNodes[3];
                           forAnswer.value = conditions[i].answer;
                         }
                       }
                     } else {
+                      fillResourceTags("r_tag_sel_m");
+                      var resourceTag = document.getElementById("r_tag_sel_m");
+                      for(var i=0; i<resourceTag.options.length; i++){
+                        if(resourceTag.options[i].id == resources[sel_id][5]){
+                          resourceTag.selectedIndex = i;
+                          break;
+                        }
+                      }
                       var resourceText = document.getElementById("m_r_text");
                       resourceText.value = resources[sel_id][2];
                       var resourceLink = document.getElementById("m_r_link");
@@ -830,31 +947,97 @@ function alert($msg) {
                     }
                     break;
                   case "remove":
-                    var resourceView = document.getElementById("r_resource_view");
-                    var form_id = document.getElementById("rem_r_id");
+                    var resourceViewNodes = document.getElementById("r_resource_view").childNodes;
+                    for(var i=0; i<resourceViewNodes.length; i++){
+                      if(resourceViewNodes[i].id == "r_resource_view"){
+
+                      }
+                    }
+                    var form_id = document.getElementById("del_r_id");
                     form_id.value = resources[sel_id][0];
-                    fillResourceTags("r_tag_sel_r");
+                    var ansID = document.getElementById("r_ans_id");
+                    ansID.value = resources[sel_id][1];
+                    fillResourceTags("r_tag_sel_m");
                     var tagSelect = document.getElementById("r_tag_sel_r");
                     switch(resources[sel_id][5]){
                       case "basic_chk":
-                        tagSelect.value = document.getElementById("basic_chk").innerHTML;
+                        tagSelect.value = "Basic Checklist";
                         break;
                       case "site_selection":
-                        tagSelect.value = document.getElementById("site_selection").innerHTML;
+                        tagSelect.value = "Site Selection";
                         break;
                       case "use_and_occ":
-                        tagSelect.value = document.getElementById("use_and_occ").innerHTML;
+                        tagSelect.value = "Use and Occupation";
                         break;
                       case "other":
-                        tagSelect.value = document.getElementById("other").innerHTML;
+                        tagSelect.value = "Other";
                         break;
                       default:
                     }
-                    console.log(tagSelect.value);
-                    var resourceText = document.getElementById("r_t_r_text");
-                    resourceText.value = resources[sel_id][2];
-                    var resourceLink = document.getElementById("r_t_r_link");
-                    resourceLink.value = resources[sel_id][3];
+                    if(resources[sel_id][4] != ""){
+                      var conditionEntry = resources[sel_id][4];
+                      var jsonObj = JSON.parse(conditionEntry);
+                      var conditions = jsonObj.conditions;
+                      for(var i=0; i<conditions.length; i++){
+                        if(i == 0){
+                          var resourceTag = document.getElementById("r_tag_sel_r");
+                          fillResourceTags("r_tag_sel_r");
+                          for(var j=0; j<resourceTag.options.length; j++){
+                            if(resourceTag.options[j].id == resources[sel_id][5]){
+                              resourceTag.selectedIndex = j;
+                              break;
+                            }
+                          }
+                          var text = document.getElementById("r_t_r_text");
+                          text.value = conditions[i].text;
+                          var link = document.getElementById("r_t_r_link");
+                          link.value = conditions[i].link;
+
+                          var forQuestion = document.getElementById("for_q_r");
+                          forQuestion.value = conditions[i].question;
+                          var forAnswer = document.getElementById("for_a_r");
+                          forAnswer.value = conditions[i].answer;
+                        } else {
+                          var element = addResourceCondition();
+                          var tagDiv = element.childNodes[0];
+                          var textDiv = element.childNodes[1];
+                          var linkDiv = element.childNodes[2];
+                          var forQADiv = element.childNodes[3];
+
+                          var resourceTag = tagDiv.childNodes[1];
+                          fillResourceTags(resourceTag.id);
+                          for(var j=0; j<resourceTag.options.length; j++){
+                            if(resourceTag.options[j].id == resources[sel_id][5]){
+                              resourceTag.selectedIndex = j;
+                              break;
+                            }
+                          }
+
+                          var text = textDiv.childNodes[1];
+                          text.value = conditions[i].text;
+                          var link = linkDiv.childNodes[1];
+                          link.value = conditions[i].link;
+
+                          var forQuestion = forQADiv.childNodes[1];
+                          forQuestion.value = conditions[i].question;
+                          var forAnswer = forQADiv.childNodes[3];
+                          forAnswer.value = conditions[i].answer;
+                        }
+                      }
+                    } else {
+                      fillResourceTags("r_tag_sel_r");
+                      var resourceTag = document.getElementById("r_tag_sel_r");
+                      for(var i=0; i<resourceTag.options.length; i++){
+                        if(resourceTag.options[i].id == resources[sel_id][5]){
+                          resourceTag.selectedIndex = i;
+                          break;
+                        }
+                      }
+                      var resourceText = document.getElementById("r_t_r_text");
+                      resourceText.value = resources[sel_id][2];
+                      var resourceLink = document.getElementById("r_t_r_link");
+                      resourceLink.value = resources[sel_id][3];
+                    }
                     break;
                   default:
                 }
@@ -908,7 +1091,6 @@ function alert($msg) {
           select3.innerHTML = '';
           var select2 = document.getElementById("col_2");
           var options = select2.options;
-          console.log(options);
           sel_id2 = options[options.selectedIndex].id;
           var select3 = document.getElementById("col_3");
           select3.innerHTML = '';
@@ -1043,7 +1225,6 @@ function alert($msg) {
               tagSelector.id = 'a_r_tag_sel'+num_resource_conditions;
               tagSelectID = tagSelector.id;
               textInput.id = 'a_r_text'+num_resource_conditions;
-              console.log(textInput.id);
               linkInput.id = 'a_r_link'+num_resource_conditions;
               forQInput.id = 'a_for_q'+num_resource_conditions;
               forAInput.id = 'a_for_a'+num_resource_conditions;
@@ -1088,7 +1269,7 @@ function alert($msg) {
               break;
             case "modify":
               num_resource_conditions++;
-              res_condition_counter.value = num_resource_conditions;
+              m_res_condition_counter.value = num_resource_conditions;
               var br1 = document.createElement("br");
               var br2 = document.createElement("br");
               var br3 = document.createElement("br");
@@ -1141,7 +1322,6 @@ function alert($msg) {
               tagSelector.id = 'a_r_tag_sel'+num_resource_conditions;
               tagSelectID = tagSelector.id;
               textInput.id = 'a_r_text'+num_resource_conditions;
-              console.log(textInput.id);
               linkInput.id = 'a_r_link'+num_resource_conditions;
               forQInput.id = 'a_for_q'+num_resource_conditions;
               forAInput.id = 'a_for_a'+num_resource_conditions;
@@ -1185,12 +1365,104 @@ function alert($msg) {
               resourceInterface.appendChild(forQADiv);
               break;
             case "remove":
+              num_resource_conditions++;
+              r_res_condition_counter.value = num_resource_conditions;
+              var br1 = document.createElement("br");
+              var br2 = document.createElement("br");
+              var br3 = document.createElement("br");
               resourceView = document.getElementById("r_resource_view");
-              resourceInterface = document.getElementById("r_resource_interface");
+              resourceInterface = document.createElement("div");
+              var tagDiv = document.createElement("div");
+              var textDiv = document.createElement("div");
+              var linkDiv = document.createElement("div");
+              var forQADiv = document.createElement("div");
+
+              tagDiv.className = "form_element_container";
+              textDiv.className = "form_element_container";
+              linkDiv.className = "form_element_container";
+              forQADiv.className = "form_element_container";
+
+              //var ansIDLabel = document.createElement("label");
+              var tagLabel = document.createElement("label");
+              var textLabel = document.createElement("label");
+              var linkLabel = document.createElement("label");
+              var forQLabel = document.createElement("label");
+              var forALabel = document.createElement("label");
+
+              //ansIDLabel.innerHTML = "For Answer: ";
+              tagLabel.innerHTML = "Tag";
+              textLabel.innerHTML = "Text";
+              linkLabel.innerHTML = "Link";
+              forQLabel.innerHTML = "If Question ";
+              forALabel.innerHTML = "Answer Is: ";
+
+              var tagSelector = document.createElement("select");
+
+              //var ansIDInput = document.createElement("input");
+              var textInput = document.createElement("input");
+              var linkInput = document.createElement("input");
+              var forQInput = document.createElement("input");
+              var forAInput = document.createElement("input");
+
+              //ansIDInput.type = "number";
+              textInput.type = "text";
+              linkInput.type = "text";
+              forQInput.type = "number";
+              forAInput.type = "number";
+
+              //ansIDInput.className = "number";
+              tagSelector.className = "tag_select";
+              forQInput.className = "number";
+              forAInput.className = "number";
+
+              //ansIDInput.id = 'a_ans_id'+num_resource_conditions;
+              tagSelector.id = 'a_r_tag_sel'+num_resource_conditions;
+              tagSelectID = tagSelector.id;
+              textInput.id = 'a_r_text'+num_resource_conditions;
+              linkInput.id = 'a_r_link'+num_resource_conditions;
+              forQInput.id = 'a_for_q'+num_resource_conditions;
+              forAInput.id = 'a_for_a'+num_resource_conditions;
+
+              //ansIDLabel.htmlFor = ansIDInput.id;
+              tagLabel.htmlFor = tagSelector.id;
+              textLabel.htmlFor = textInput.id;
+              linkLabel.htmlFor = linkInput.id;
+              forQLabel.htmlFor = forQInput.id;
+              forALabel.htmlFor = forAInput.id;
+
+              //ansIDInput.name = "answer_id"+num_resource_conditions;
+              tagSelector.name = "resource_tag"+num_resource_conditions;
+              textInput.name = "resource_text"+num_resource_conditions;
+              linkInput.name = "resource_link"+num_resource_conditions;
+              forQInput.name = "for_question"+num_resource_conditions;
+              forAInput.name = "for_answer"+num_resource_conditions;
+
+              //tagDiv.appendChild(ansIDLabel);
+              //tagDiv.appendChild(ansIDInput);
+              tagDiv.appendChild(tagLabel);
+              tagDiv.appendChild(tagSelector);
+              tagDiv.appendChild(br1);
+
+              textDiv.appendChild(textLabel);
+              textDiv.appendChild(textInput);
+              textDiv.appendChild(br2);
+
+              linkDiv.appendChild(linkLabel);
+              linkDiv.appendChild(linkInput);
+              linkDiv.appendChild(br3);
+
+              forQADiv.appendChild(forQLabel);
+              forQADiv.appendChild(forQInput);
+              forQADiv.appendChild(forALabel);
+              forQADiv.appendChild(forAInput);
+
+              resourceInterface.appendChild(tagDiv);
+              resourceInterface.appendChild(textDiv);
+              resourceInterface.appendChild(linkDiv);
+              resourceInterface.appendChild(forQADiv);
               break;
             default:
           }
-          console.log(num_resource_conditions);
           resourceView.appendChild(resourceInterface);
           fillResourceTags(tagSelectID);
           return resourceInterface;

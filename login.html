@@ -1,0 +1,65 @@
+<html>
+
+<head>
+	<title>WMDBizAssist Login</title>
+	<link rel="stylesheet" type="text/css" href="css/login.css">
+
+	<script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-auth.js"></script>
+	<script>
+		// Initialize Firebase
+		var config = {
+			apiKey: "AIzaSyBWxn3avVxaZly4ZRfcJ47Ddv00nOL5L1s",
+			authDomain: "wmd-bizassist.firebaseapp.com",
+			databaseURL: "https://wmd-bizassist.firebaseio.com",
+			projectId: "wmd-bizassist",
+			storageBucket: "wmd-bizassist.appspot.com",
+			messagingSenderId: "25335187061"
+		};
+		firebase.initializeApp(config);
+	</script>
+
+	<script src="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.js"></script>
+	<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.css" />
+
+	<script>
+		// Initialize the FirebaseUI Widget using Firebase.
+		var ui = new firebaseui.auth.AuthUI(firebase.auth());
+
+		var uiConfig = {
+			callbacks: {
+				signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+					// User successfully signed in.
+					// Return type determines whether we continue the redirect automatically
+					// or whether we leave that to developer to handle.
+					return true;
+				},
+				uiShown: function() {
+					// The widget is rendered.
+					// Hide the loader.
+					document.getElementById('loader').style.display = 'none';
+				}
+			},
+			// Will use popup for IDP Providers sign-in flow instead of the default, redirect.
+			signInFlow: 'popup',
+			signInSuccessUrl: 'admin',
+			signInOptions: [
+				// Leave the lines as is for the providers you want to offer your users.
+				firebase.auth.EmailAuthProvider.PROVIDER_ID
+			],
+			// Terms of service url.
+			tosUrl: '#'
+		};
+
+		// The start method will wait until the DOM is loaded.
+		ui.start('#firebaseui-auth-container', uiConfig);
+	</script>
+</head>
+
+<body>
+	<div id="firebaseui-auth-container" style="position:relative; top:50%; transform:translateY(-50%);"></div>
+	<div id="loader" style="text-align:center; position:relative; top:50%; transform:translateY(-50%); color:white;">Loading...</div>
+</body>
+
+</html>

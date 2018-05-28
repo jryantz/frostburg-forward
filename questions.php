@@ -1,5 +1,6 @@
 <?php
 require_once('app/init.php');
+
 $ser="localhost";
 $user="root";
 $password="WMDBizAssist";
@@ -10,29 +11,35 @@ $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 //$con = new mysqli($ser, $user, $password, $db);
 
 // Check the connection to the database.
-if($con->connect_error) { die('Connection Failed: ' . $con->connect_error); }
+if ($con->connect_error) {
+    die('Connection Failed: ' . $con->connect_error);
+}
 
 $questions = array();
 
 $sql = "SELECT * FROM questions";
 $result = $con->query($sql);
 
-if($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
         $questions[$row['id']] = array($row['question'], $row['flow']);
     }
-} else { echo 'No Results'; }
+} else {
+    echo 'No Results';
+}
 
 $answers = array();
 
 $sql = "SELECT * FROM answers";
 $result = $con->query($sql);
 
-if($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
         $answers[$row['question_id']][] = array($row['id'], $row['answer']);
     }
-} else { echo 'No Results'; }
+} else {
+    echo 'No Results';
+}
 
 /*$resources = array();
 $sql = "SELECT * FROM resources";
@@ -51,11 +58,11 @@ if($result->num_rows > 0) {
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-118657595-1"></script>
         <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
 
-        gtag('config', 'UA-118657595-1');
+            gtag('config', 'UA-118657595-1');
         </script>
 
         <title id="abc">BizAssist Quick Start Tool</title>
@@ -68,19 +75,17 @@ if($result->num_rows > 0) {
         <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700" rel="stylesheet">
         <link href="css/app.css" type="text/css" rel="stylesheet">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-        </script>
     </head>
 
     <body>
         <header>
             <nav class="grid-fixed">
-                <a href="../index.html" class="title">Western Maryland BizAssist</a>
+                <a href="index" class="title">Western Maryland BizAssist</a>
 
                 <ul>
-                    <li><a href="../index.html">Home</a></li>
-                    <li><a href="start.html">Quick Start Tool</a></li>
-                    <li><a href="AboutUs.html">About</a></li>
+                    <li><a href="index">Home</a></li>
+                    <li><a href="start">Quick Start Tool</a></li>
+                    <li><a href="about">About</a></li>
                     <li><a href="#">Clients</a></li>
                 </ul>
             </nav>
@@ -100,7 +105,6 @@ if($result->num_rows > 0) {
             </section>
         </main>
         <script>
-
           var session = {responses:{}}
           var selectedAnswer;
 
@@ -113,9 +117,10 @@ if($result->num_rows > 0) {
           var answerKeys = Object.keys(answers);
 
           //Convert the JSON text contained for question flow cases into JSON objects and store them back into the question array.
-          for(var i=1; i<=questionKeys.length; i++){
-            questions[i][1] = JSON.parse(questions[i][1]);
+          for(var i=1; i<=questionKeys.length; i++) {
+              questions[i][1] = JSON.parse(questions[i][1]);
           }
+
           console.log(questions);
 
           $(document).ready(function(){
@@ -163,7 +168,7 @@ if($result->num_rows > 0) {
                 setAnswers(currQuestion);
               } else {  //Open the report page after all available questions have been answered.
                 localStorage.setItem("session", JSON.stringify(session));
-                window.location.href = 'report.php';
+                window.location.href = 'report';
               }
           }
 
@@ -216,5 +221,3 @@ if($result->num_rows > 0) {
         </script>
     </body>
 </html>
-
-<script></script>

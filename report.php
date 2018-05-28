@@ -14,49 +14,52 @@ $resource_conditions = array();
 $sql = "SELECT * FROM resources";
 $result = $con->query($sql);
 
-if($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
-      //var_dump($row);
-    $resource_conditions[$row['answer_id']][] = array(utf8_encode($row['text']), utf8_encode($row['link']), utf8_encode($row['condition']), $row['tag']);
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        //var_dump($row);
+        $resource_conditions[$row['answer_id']][] = array(utf8_encode($row['text']), utf8_encode($row['link']), utf8_encode($row['condition']), $row['tag']);
     }
-} else { echo 'No Results'; }
+} else {
+    echo 'No Results';
+}
 
 //If POST parameters are set, submit the given parameters to the PHP mail function to send the report.
 $report_id = "none";
-if(isset($_GET['report_id'])){
-  $report_id = $_GET['report_id'];
-  $queryStr = str_pad($report_id,6,"0",STR_PAD_LEFT);
-  $sql = "SELECT * FROM reports WHERE id=".$queryStr;
-  $result = $con->query($sql);
-  if($result->num_rows > 0) {
-      while($row = $result->fetch_assoc()) {
-        $reportFromDB = str_getcsv($row['report'], ",", '"');
-        $report = array();
-        $size = count($reportFromDB);
-        $count = 0;
-        echo $size;
-        while($count < $size){
-          echo $count;
-          $report_item = array();
-          for($j=0; $j<3; $j++){
-            array_push($report_item, $reportFromDB[$count+$j]);
-          }
-          array_push($report, $report_item);
-          $count+=3;
+if (isset($_GET['report_id'])) {
+    $report_id = $_GET['report_id'];
+    $queryStr = str_pad($report_id, 6, "0", STR_PAD_LEFT);
+    $sql = "SELECT * FROM reports WHERE id=".$queryStr;
+    $result = $con->query($sql);
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $reportFromDB = str_getcsv($row['report'], ",", '"');
+            $report = array();
+            $size = count($reportFromDB);
+            $count = 0;
+            echo $size;
+            while ($count < $size) {
+                echo $count;
+                $report_item = array();
+                for ($j=0; $j<3; $j++) {
+                    array_push($report_item, $reportFromDB[$count+$j]);
+                }
+                array_push($report, $report_item);
+                $count+=3;
+            }
         }
-      }
-  } else { echo 'No Results'; }
+    } else {
+        echo 'No Results';
+    }
 }
-if(isset($_POST['reportArr'])){
-  echo 'Success';
-  $report = mysqli_real_escape_string($con, $_POST['reportArr']);
-  $report = json_encode($_POST['reportArr']);
-  $report = utf8_encode($report);
+if (isset($_POST['reportArr'])) {
+    echo 'Success';
+    $report = mysqli_real_escape_string($con, $_POST['reportArr']);
+    $report = json_encode($_POST['reportArr']);
+    $report = utf8_encode($report);
 }
-if(isset($_POST['emailInput']))
-{
+if (isset($_POST['emailInput'])) {
     $sql = "INSERT INTO `reports` (`report`) VALUES ('".$report."')";
-    if ($con->query($sql) === TRUE) {
+    if ($con->query($sql) === true) {
         echo "New record created successfully";
     } else {
         echo "Error: " . $sql . "<br>" . $con->error;
@@ -69,7 +72,7 @@ if(isset($_POST['emailInput']))
 
     $to = $_POST['emailInput'];
     $subject = "Your BizAssist Report";
-    $report_link = "https://wmdbizassist.org/pages/report.php?report_id=".$report_id;
+    $report_link = "https://wmdbizassist.org/pages/report?report_id=".$report_id;
     $message = "Thank you for using WMD BizAssist. Click the link below to access your personal BizAssist report. \n\n" . $report_link;
     $message = wordwrap($message, 70);
     $headers = "From: donotreply@wmdbizassist.org";
@@ -78,17 +81,19 @@ if(isset($_POST['emailInput']))
 
     $sendToSBDC = isset($_POST['sendToSBDC']) ? 1 : 0;
 
-    if($sendToSBDC == 1){
-      $to = "adm.wmdbizassist@gmail.com";
-      $subject = "A new report has been generated. ID: ".$report_id;
-      $message = "The following BizAssist report has been generated, you can view it at the link below. \n\n".$report_link;
-      $message = wordwrap($message, 70);
-      mail($to, $subject, $message, $headers);
+    if ($sendToSBDC == 1) {
+        $to = "adm.wmdbizassist@gmail.com";
+        $subject = "A new report has been generated. ID: ".$report_id;
+        $message = "The following BizAssist report has been generated, you can view it at the link below. \n\n".$report_link;
+        $message = wordwrap($message, 70);
+        mail($to, $subject, $message, $headers);
     }
 }
 
 // Check the connection to the database.
-if($con->connect_error) { die('Connection Failed: ' . $con->connect_error); }
+if ($con->connect_error) {
+    die('Connection Failed: ' . $con->connect_error);
+}
 ?>
 
 <!doctype html>
@@ -98,11 +103,11 @@ if($con->connect_error) { die('Connection Failed: ' . $con->connect_error); }
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-118657595-1"></script>
         <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
 
-          gtag('config', 'UA-118657595-1');
+            gtag('config', 'UA-118657595-1');
         </script>
 
         <title>BizAssist - Report</title>
@@ -120,12 +125,12 @@ if($con->connect_error) { die('Connection Failed: ' . $con->connect_error); }
     <body>
         <header>
             <nav class="grid-fixed">
-                <a href="../index.html" class="title">Western Maryland BizAssist</a>
+                <a href="index" class="title">Western Maryland BizAssist</a>
 
                 <ul>
-                    <li><a href="../index.html">Home</a></li>
-                    <li><a href="start.html">Quick Start Tool</a></li>
-                    <li><a href="AboutUs.html">About</a></li>
+                    <li><a href="index">Home</a></li>
+                    <li><a href="start">Quick Start Tool</a></li>
+                    <li><a href="about">About</a></li>
                     <li><a href="#">Clients</a></li>
                 </ul>
             </nav>
@@ -346,16 +351,15 @@ if($con->connect_error) { die('Connection Failed: ' . $con->connect_error); }
               data: JSON.stringify({ subject: subject, body: body }),
               cache: false
             }).done(function(){
-              <?php if(isset($_POST['emailTo']) && isset($_POST['subject']) && isset($_POST['body']))
-              {
-                $to = $_POST['emailTo'];
-                $subject = $_POST['subject'];
-                $body = $_POST['body'];
-                $headers = 'From: reports@wmdbizassist.org' . "\r\n";
-                $headers .= "To: $to\r\n";
+              <?php if (isset($_POST['emailTo']) && isset($_POST['subject']) && isset($_POST['body'])) {
+    $to = $_POST['emailTo'];
+    $subject = $_POST['subject'];
+    $body = $_POST['body'];
+    $headers = 'From: reports@wmdbizassist.org' . "\r\n";
+    $headers .= "To: $to\r\n";
 
-                mail($to, $subject, $body, $headers);
-              } ?>;
+    mail($to, $subject, $body, $headers);
+} ?>;
             });
             window.location.href = "";
           } else {

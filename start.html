@@ -6,11 +6,14 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-118657595-1"></script>
     <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+        window.dataLayer = window.dataLayer || [];
 
-    gtag('config', 'UA-118657595-1');
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-118657595-1');
     </script>
 
     <title>BizAssist Quick Start Tool</title>
@@ -27,12 +30,12 @@
 <body>
     <header>
         <nav class="grid-fixed">
-            <a href="../index.html" class="title">Western Maryland BizAssist</a>
+            <a href="index" class="title">Western Maryland BizAssist</a>
 
             <ul>
-                <li><a href="../index.html">Home</a></li>
-                <li><a href="start.html">Quick Start Tool</a></li>
-                <li><a href="AboutUs.html">About</a></li>
+                <li><a href="index">Home</a></li>
+                <li><a href="start">Quick Start Tool</a></li>
+                <li><a href="about">About</a></li>
                 <li><a href="#">Clients</a></li>
             </ul>
         </nav>
@@ -47,13 +50,12 @@
                     <br>
                     <p>Once you have completed all of the questions, a report will be generated that will contain all of the information that you have entered. Please print this report - (or keep the report ID) - for future reference.</p>
                     <div class="button">
-                        <a href="questions.php">Continue</a>
+                        <a href="questions">Continue</a>
                     </div>
                 </div>
             </div>
         </section>
     </main>
-
 </body>
 
 </html>
