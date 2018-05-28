@@ -330,19 +330,19 @@ function alert($msg)
           <div>
             <ul id="select_content" class="select_content">
               <li>
-                <h3 id="col_1_header"></h3>
+                <h3 id="col_1_header" class="col_header"></h3>
                 <div id="col_1_div">
                   <select id="col_1" name="col_1" size=20 onchange="selectionChanged(this);"></select>
                 </div>
               </li>
               <li>
-                <h3 id="col_2_header"></h3>
+                <h3 id="col_2_header" class="col_header"></h3>
                 <div id="col_2_div">
                   <select id="col_2" name="col_2" size=20 onchange="updateCol3();"></select>
                 </div>
               </li>
               <li>
-                <h3 id="col_3_header"></h3>
+                <h3 id="col_3_header" class="col_header"></h3>
                 <div id="col_3_div">
                   <select id="col_3" name="col_3" size=20></select>
                 </div>
