@@ -321,16 +321,13 @@ main section.single {
   background-color: rgba(196,31,64,1);
   color: white;
 }
-@media only screen and (max-width:690px) {
+
+@media only screen and (max-width:720px) {
   .single {
-    width:689px;
+    width:719px;
   }
 }
-@media only screen and (max-width:1046px){
-  .single {
-    width:1046px;
-  }
-}
+
 main section.single h1 {
     text-align: center;
     margin-bottom: 30px;
